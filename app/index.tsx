@@ -3,34 +3,49 @@ import { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Image,
-  Linking,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
+  useWindowDimensions,
   View,
 } from 'react-native';
-import Footer from '../components/Footer';
 
-import { getScannedSlug } from '@/utils/storage';
+import GoldButton from '@/components/GoldButton';
+import {
+  getFreeAccess,
+  getRegistration,
+  getScannedSlug,
+} from '@/utils/storage';
 import { GlobalStyles } from '../styles/globalStyles';
 
-export default function HomeScreen() {
+export default function WelcomeScreen() {
   const router = useRouter();
+  const { width } = useWindowDimensions();
   const [checking, setChecking] = useState(true);
 
   useEffect(() => {
     let active = true;
 
     (async () => {
-      const savedSlug = await getScannedSlug();
+      const [savedSlug, registration, freeAccess] = await Promise.all([
+        getScannedSlug(),
+        getRegistration(),
+        getFreeAccess(),
+      ]);
       if (!active) return;
 
       if (savedSlug) {
-        router.replace({
-          pathname: '/dashboard',
-          params: { slug: savedSlug },
-        });
+        router.replace({ pathname: '/dashboard', params: { slug: savedSlug } });
+        return;
+      }
+
+      if (registration && freeAccess) {
+        router.replace('/dashboard');
+        return;
+      }
+
+      if (registration) {
+        router.replace('/ticket');
         return;
       }
 
@@ -45,76 +60,97 @@ export default function HomeScreen() {
   if (checking) {
     return (
       <View style={[GlobalStyles.container, styles.loading]}>
-        <ActivityIndicator size="large" />
+        <ActivityIndicator size="large" color="#F6D78B" />
       </View>
     );
   }
 
-  return (
-    <View style={{ flex: 1, }}>
-        
-        <ScrollView style={{ flex:1, }} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
-          <View
-            style={{
-              width: '100%',
-              padding: 30,
-              alignItems: 'center',
-            }}
-          >
-            <Text
-              style={{
-                paddingBottom: 30,
-                fontSize: 35,
-                fontWeight: '400',
-                textAlign: 'center',
-                color: '#fff', 
-                fontFamily: 'Audiowide_400Regular'
-              }}
-            >
-              Welcome to Red Planel Resort{' '}
-            </Text>
+  const planetSize = Math.min(width * 0.45, 200);
+  const contentWidth = Math.min(width, 520);
 
-            <View style={{ flex: 1, flexDirection: 'column', gap: 20 }}>
-              <Pressable style={({ pressed }) => [
-                    styles.linkStyle,
-                    pressed && styles.pressed
-                  ]}
-                  onPress={() => router.push('/scanner')}>
-                <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 14, fontWeight: '400', textTransform: 'uppercase', marginBottom:14, textAlign: 'center' }}>Scan your ticket</Text>
-                <Image
-                    source={require('./../assets/images/scannerImage.png')}
-                    style={{ width: 140, height: 137, alignSelf: 'center' }}
-                  />
-              </Pressable>
-              <Pressable
-                style={({ pressed }) => [
-                  styles.linkStyle,
-                  pressed && styles.pressed
-                ]}
-                onPress={() =>
-                  Linking.openURL('https://redplanetresorts.com/pages/plan-your-trip')
-                }
-              >
-                <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 14, fontWeight: '400', textTransform: 'uppercase', marginBottom:14, textAlign: 'center' }}>Buy Ticket</Text>
-                  <Image
-                    source={require('./../assets/images/ticket.png')}
-                    style={{ width: 161, height: 105, alignSelf: 'center' }}
-                  />
-              </Pressable>
-            </View>
+  return (
+    <ScrollView
+      style={{ flex: 1 }}
+      contentContainerStyle={styles.scroll}
+    >
+      <View style={[styles.content, { width: contentWidth }]}>
+        <View style={[styles.planetGlow, { width: planetSize + 40, height: planetSize + 40, borderRadius: (planetSize + 40) / 2 }]}>
+          <View style={{ width: planetSize, height: planetSize, borderRadius: planetSize / 2, overflow: 'hidden' }}>
+            <Image
+              source={require('../assets/images/mars.gif')}
+              style={{ width: planetSize, height: planetSize }}
+              resizeMode="cover"
+            />
           </View>
-        </ScrollView>
-      <Footer/>
-    </View>
+        </View>
+
+        <Text style={styles.kicker}>Red Planet Resorts</Text>
+
+        <Text style={styles.title}>Welcome to{'\n'}Red Planet Resorts</Text>
+
+        <View style={styles.divider} />
+
+        <Text style={styles.subtitle}>
+          Experience the way space travel was always meant to be. With the
+          luxury of Red Planet Resorts.
+        </Text>
+
+        <GoldButton
+          testID="get-started"
+          title="Get Started"
+          onPress={() => router.push('/register')}
+          style={styles.cta}
+        />
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  loading: {justifyContent: 'center',  alignItems: 'center',},
-  linkStyle: {backgroundColor: 'rgba(217, 217, 217, 0.12)', paddingLeft:22, paddingRight:22, paddingTop:22, paddingBottom:22, borderRadius: 6, color:'#fff', textAlign: 'center', fontFamily: 'Audiowide_400Regular', fontSize:14, fontWeight: '400', textTransform: 'uppercase', },
-  linkStyleRed: {backgroundColor: 'red',  paddingLeft: 15,   paddingRight: 15,  paddingTop: 12, paddingBottom: 12, marginTop: 20, color: '#fff',},
-  titleContainer: {flexDirection: 'row',  alignItems: 'center', gap: 8,},
-  stepContainer: { gap: 8, marginBottom: 8,},
-  reactLogo: { height: 178, width: 290, bottom: 0, left: 0, position: 'absolute',},
-  pressed: { backgroundColor: 'rgba(0, 0, 0, 0.50)', transform: [{ scale: 0.98 }],},
+  loading: { justifyContent: 'center', alignItems: 'center' },
+  scroll: { flexGrow: 1, justifyContent: 'center', alignItems: 'center', paddingVertical: 30 },
+  content: { paddingHorizontal: 28, alignItems: 'center' },
+  planetGlow: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 28,
+    backgroundColor: 'rgba(212, 166, 58, 0.06)',
+    borderWidth: 1,
+    borderColor: 'rgba(246, 215, 139, 0.35)',
+    shadowColor: '#FF6A2B',
+    shadowOpacity: 0.6,
+    shadowRadius: 30,
+    shadowOffset: { width: 0, height: 0 },
+  },
+  kicker: {
+    color: '#F6D78B',
+    fontFamily: 'Audiowide_400Regular',
+    fontSize: 12,
+    letterSpacing: 4,
+    textTransform: 'uppercase',
+    marginBottom: 12,
+  },
+  title: {
+    color: '#fff',
+    fontFamily: 'Audiowide_400Regular',
+    fontSize: 30,
+    lineHeight: 40,
+    textAlign: 'center',
+  },
+  divider: {
+    width: 70,
+    height: 2,
+    backgroundColor: '#D4A63A',
+    borderRadius: 2,
+    marginVertical: 20,
+  },
+  subtitle: {
+    color: '#CCF6FF',
+    fontFamily: 'Audiowide_400Regular',
+    fontSize: 13,
+    lineHeight: 22,
+    textAlign: 'center',
+    marginBottom: 36,
+  },
+  cta: { alignSelf: 'stretch' },
 });

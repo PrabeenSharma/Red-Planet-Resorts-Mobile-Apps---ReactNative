@@ -16,6 +16,7 @@ import {
 import { registerForPushNotificationsAsync } from '@/utils/notifications';
 
 import {
+  saveFreeAccess,
   saveNotificationsEnabled,
   saveScannedSlug,
 } from '@/utils/storage';
@@ -71,6 +72,7 @@ export default function NotificationSettings() {
       if (slug) {
 
         await saveScannedSlug(slug);
+        await saveFreeAccess(false);
 
         setDebugMessage(
           `Slug saved: ${slug}`

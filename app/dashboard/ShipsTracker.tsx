@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 
+import TicketRequired from '@/components/TicketRequired';
 import useMissionPage from '@/hooks/useMissionPage';
 import ButtonsGroup from '../../components/ButtonsGroup';
 import RocketWebView from '../../components/RocketProgress';
@@ -17,7 +18,18 @@ import ShipsTracker from '../../components/ShipsTracker';
 
 export default function MissionPage() {
   const { slug: slugParam } = useLocalSearchParams<{ slug?: string }>();
-  const { page, loading } = useMissionPage(slugParam);
+  const { page, loading, isFreeUser } = useMissionPage(slugParam);
+
+  if (isFreeUser) {
+    return (
+      <ScrollView style={{ flex: 1 }}>
+        <View style={styles.mainContent}>
+          <ButtonsGroup />
+          <TicketRequired feature="Ship Tracker" />
+        </View>
+      </ScrollView>
+    );
+  }
 
   const screenWidth = Dimensions.get('window').width;
   const imageHeight = screenWidth / 3.14;

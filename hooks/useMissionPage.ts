@@ -1,32 +1,18 @@
-import { getScannedSlug } from '@/utils/storage';
 import { useEffect, useState } from 'react';
 
+import { FREE_DASHBOARD_SLUG } from '@/constants/config';
+import useTicketAccess from '@/hooks/useTicketAccess';
 
 const pageCache: Record<string, any> = {};
 
 export default function useMissionPage(slugParam?: string) {
   const [page, setPage] = useState<any>(null);
-  const [slug, setSlug] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // slug resolve
-  useEffect(() => {
-    let active = true;
+  const { ticketSlug, hasTicket } = useTicketAccess(slugParam);
 
-    (async () => {
-      if (slugParam) {
-        if (active) setSlug(slugParam);
-        return;
-      }
-
-      const saved = await getScannedSlug();
-      if (active) setSlug(saved);
-    })();
-
-    return () => {
-      active = false;
-    };
-  }, [slugParam]);
+  // Users without a ticket see the public mission page.
+  const slug = hasTicket === null ? null : ticketSlug || FREE_DASHBOARD_SLUG;
 
   // api call
   useEffect(() => {
@@ -63,5 +49,5 @@ export default function useMissionPage(slugParam?: string) {
     fetchData();
   }, [slug]);
 
-  return { page, loading };
+  return { page, loading, isFreeUser: hasTicket === false };
 }

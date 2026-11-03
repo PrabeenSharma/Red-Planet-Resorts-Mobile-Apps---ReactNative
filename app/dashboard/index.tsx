@@ -28,7 +28,10 @@ import {
   View
 } from 'react-native';
 
+import FreeUserBanner from '@/components/FreeUserBanner';
+import { isTicketOnlyRoute } from '@/constants/config';
 import useMissionPage from '@/hooks/useMissionPage';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function MissionPage() {
   const router = useRouter();
@@ -37,7 +40,7 @@ export default function MissionPage() {
 
 
   const { slug: slugParam } = useLocalSearchParams<{ slug?: string }>();
-  const { page, loading } = useMissionPage(slugParam);
+  const { page, loading, isFreeUser } = useMissionPage(slugParam);
 
   
 const rawMessage: string = page?.acf?.captains_message || '';
@@ -100,6 +103,8 @@ console.log(videoUrl);
   
   
 
+const isLocked = (route: string) => isFreeUser && isTicketOnlyRoute(route);
+
 const handleRefer = async () => {
   const message = `Join this mission! Buy your ticket here: https://trip.redplanetresorts.com/`;
 
@@ -140,6 +145,8 @@ if (loading) {
   <ScrollView style={{ flex: 1 }}>
     <View style={{ flex: 1 }}>
       <View style={styles.mainContent}>
+        {isFreeUser && <FreeUserBanner />}
+
         <Text style={styles.mainHeading}>Mission information</Text>
 
         <View style={styles.thereeColumns}>
@@ -346,8 +353,11 @@ if (loading) {
               <View style={styles.box}>
                 <Pressable style={({ pressed }) => [
                       styles.linkStyle,
-                      pressed && styles.pressed
+                      pressed && styles.pressed,
+                      isLocked('/dashboard/DistanceProgressIndicator') && styles.locked,
                     ]}
+                    disabled={isLocked('/dashboard/DistanceProgressIndicator')}
+                    accessibilityState={{ disabled: isLocked('/dashboard/DistanceProgressIndicator') }}
                     onPress={() => router.push('/dashboard/DistanceProgressIndicator')}>
                     <LinearGradient
                       colors={[
@@ -360,6 +370,7 @@ if (loading) {
                       end={{ x: 1, y: 0 }}  
                       style={styles.anchorBox}
                     >
+                    {isLocked('/dashboard/DistanceProgressIndicator') && <Ionicons name="lock-closed" size={12} color="#F6D78B" style={styles.lockIcon} />}
                     <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 10, fontWeight: '400', textTransform: 'uppercase', marginBottom:0, textAlign: 'center' }}>Distance & Progress{'\n'}Indicators</Text>
                   </LinearGradient>
                 </Pressable>
@@ -391,8 +402,11 @@ if (loading) {
               <View style={styles.box}>
                 <Pressable style={({ pressed }) => [
                       styles.linkStyle,
-                      pressed && styles.pressed
+                      pressed && styles.pressed,
+                      isLocked('/dashboard/CommunicationMetrics') && styles.locked,
                     ]}
+                    disabled={isLocked('/dashboard/CommunicationMetrics')}
+                    accessibilityState={{ disabled: isLocked('/dashboard/CommunicationMetrics') }}
                     onPress={() => router.push('/dashboard/CommunicationMetrics')}>
                     <LinearGradient
                       colors={[
@@ -405,6 +419,7 @@ if (loading) {
                       end={{ x: 1, y: 0 }}  
                       style={styles.anchorBox}
                     >
+                    {isLocked('/dashboard/CommunicationMetrics') && <Ionicons name="lock-closed" size={12} color="#F6D78B" style={styles.lockIcon} />}
                     <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 10, fontWeight: '400', textTransform: 'uppercase', marginBottom:0, textAlign: 'center' }}>Communication{'\n'}Metrics</Text>
                   </LinearGradient>
                 </Pressable>
@@ -412,8 +427,11 @@ if (loading) {
               <View style={styles.box}>
                 <Pressable style={({ pressed }) => [
                       styles.linkStyle,
-                      pressed && styles.pressed
+                      pressed && styles.pressed,
+                      isLocked('/dashboard/ShipsTracker') && styles.locked,
                     ]}
+                    disabled={isLocked('/dashboard/ShipsTracker')}
+                    accessibilityState={{ disabled: isLocked('/dashboard/ShipsTracker') }}
                     onPress={() => router.push('/dashboard/ShipsTracker')}>
                     <LinearGradient
                       colors={[
@@ -426,6 +444,7 @@ if (loading) {
                       end={{ x: 1, y: 0 }}  
                       style={styles.anchorBox}
                     >
+                    {isLocked('/dashboard/ShipsTracker') && <Ionicons name="lock-closed" size={12} color="#F6D78B" style={styles.lockIcon} />}
                     <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 10, fontWeight: '400', textTransform: 'uppercase', marginBottom:0, textAlign: 'center' }}>Ship{'\n'}Tracker</Text>
                   </LinearGradient>
                 </Pressable>
@@ -689,6 +708,8 @@ const styles = StyleSheet.create({
   row: {  flexDirection: 'row', justifyContent: 'space-between',  marginBottom: 12, },
   box: {  width: '48%',  alignItems: 'center', },
   linkStyle:{  width:'100%'},
+  locked: { opacity: 0.45 },
+  lockIcon: { position: 'absolute', top: 6, right: 10 },
   pressed: { opacity: 0.6, },
   anchorBox:{ width:'100%', height:50, borderRadius:10, justifyContent:'center', alignItems:'center', borderColor:'rgba(101, 129, 135, 1)', borderWidth:1, borderStyle:'solid', paddingHorizontal:5, },
   hsitoryContainer:{},
