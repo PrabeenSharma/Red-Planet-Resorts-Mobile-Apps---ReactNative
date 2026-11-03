@@ -9,6 +9,8 @@ import InstagramFeed from '../../components/InstagramFeed';
 import SpaceHistory from '../../components/SpaceHistory';
 import SpaceNews from '../../components/SpaceNews';
 import SubmitStoryModal from '../../components/SubmitYoursForm';
+import { WebView } from 'react-native-webview';
+import YoutubePlayer from "react-native-youtube-iframe";
 
 import { useState } from 'react';
 
@@ -40,13 +42,42 @@ export default function MissionPage() {
   
 const rawMessage: string = page?.acf?.captains_message || '';
 
-const htmlMessage =
-  rawMessage.includes('<')
-    ? rawMessage
-    : rawMessage
-        .split(/\r\n\r\n/)
-        .map((item: string) => `<p>${item.trim()}</p>`)
-        .join('');
+// Extract iframe URL
+const iframeMatch = rawMessage.match(
+  /<iframe[^>]*src="([^"]+)"[^>]*><\/iframe>/i
+);
+
+const videoUrl = iframeMatch?.[1] ?? null;
+
+// Remove iframe
+let finalHtml = rawMessage.replace(
+  /<iframe[\s\S]*?<\/iframe>/gi,
+  ""
+);
+
+// 1. Paragraph separator: \r\n<br>\r\n
+finalHtml = finalHtml.replace(
+  /\r\n\s*<br\s*\/?>\s*\r\n/gi,
+  "###PARAGRAPH###"
+);
+
+// 2. Remaining single newlines
+finalHtml = finalHtml.replace(/\r\n/g, "<br/>");
+
+// 3. Paragraph placeholders → <p>
+finalHtml = `<p>${finalHtml
+  .replace(/###PARAGRAPH###/g, "</p><p>")
+}</p>`;
+
+//console.log(finalHtml);
+
+
+console.log(videoUrl);
+
+//console.log('Final HTML:\n', finalHtml);
+//console.log('Video URL:', videoUrl);
+
+//console.log(JSON.stringify(rawMessage));
 
 
  const buttonText =
@@ -537,7 +568,7 @@ if (loading) {
               <RenderHTML
   contentWidth={width}
   source={{
-    html: htmlMessage,
+    html: finalHtml ,
   }}
 
   systemFonts={[
@@ -583,7 +614,25 @@ if (loading) {
       fontFamily: 'Audiowide_400Regular',
     },
   }}
+
+  
 />
+{videoUrl && (
+  <WebView
+    source={{ uri: videoUrl, headers: {
+      Referer: "https://redplanetresorts.com/",
+    }, }} 
+    style={{ height: 220 }}
+  javaScriptEnabled
+  domStorageEnabled
+  allowsFullscreenVideo
+  mediaPlaybackRequiresUserAction={false}
+  originWhitelist={['*']}
+  mixedContentMode="always"
+  allowsInlineMediaPlayback
+  startInLoadingState
+  />
+)}
 
 
             </ScrollView>
