@@ -8,9 +8,6 @@ export const WP_REGISTER_URL =
 export const GOOGLE_SCRIPT_URL =
   process.env.EXPO_PUBLIC_GOOGLE_SCRIPT_URL || '';
 
-export const NASA_ID_REQUIRED =
-  process.env.EXPO_PUBLIC_NASA_ID_REQUIRED === 'true';
-
 // WordPress mission page shown to users without a ticket.
 export const FREE_DASHBOARD_SLUG =
   process.env.EXPO_PUBLIC_FREE_DASHBOARD_SLUG || 'home';

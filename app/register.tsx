@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 
 import GoldButton from '@/components/GoldButton';
-import { NASA_ID_REQUIRED } from '@/constants/config';
 import {
   EMAIL_REGEX,
   RegistrationPayload,
@@ -42,8 +41,6 @@ function validate(values: RegistrationPayload): Errors {
 
   if (!values.address) errors.address = 'Address is required.';
   else if (values.address.length < 5) errors.address = 'Please enter your complete address.';
-
-  if (NASA_ID_REQUIRED && !values.nasaId) errors.nasaId = 'NASA ID is required.';
 
   return errors;
 }
@@ -219,8 +216,7 @@ export default function RegisterScreen() {
           <FormField
             ref={nasaRef}
             label="NASA ID"
-            required={NASA_ID_REQUIRED}
-            hint={NASA_ID_REQUIRED ? undefined : 'Optional — verified against our crew records'}
+            hint="Optional — verified against our crew records"
             value={values.nasaId}
             error={errors.nasaId}
             onChangeText={(v) => setField('nasaId', v)}
