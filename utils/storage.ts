@@ -58,3 +58,53 @@ export async function clearNotificationsEnabled(): Promise<void> {
 export async function clearAllScanData(): Promise<void> {
   await Promise.all([clearScannedSlug(), clearNotificationsEnabled()]);
 }
+
+const REGISTRATION_KEY = 'user_registration';
+const FREE_ACCESS_KEY = 'free_access';
+
+export type Registration = {
+  fullName: string;
+  email: string;
+  address: string;
+  nasaId: string;
+  registeredAt: string;
+};
+
+export async function saveRegistration(data: Registration): Promise<void> {
+  try {
+    await AsyncStorage.setItem(REGISTRATION_KEY, JSON.stringify(data));
+  } catch (err) {
+    console.log('Failed to save registration', err);
+  }
+}
+
+export async function getRegistration(): Promise<Registration | null> {
+  try {
+    const value = await AsyncStorage.getItem(REGISTRATION_KEY);
+    return value ? (JSON.parse(value) as Registration) : null;
+  } catch (err) {
+    console.log('Failed to read registration', err);
+    return null;
+  }
+}
+
+export async function saveFreeAccess(enabled: boolean): Promise<void> {
+  try {
+    if (enabled) {
+      await AsyncStorage.setItem(FREE_ACCESS_KEY, 'yes');
+    } else {
+      await AsyncStorage.removeItem(FREE_ACCESS_KEY);
+    }
+  } catch (err) {
+    console.log('Failed to save free access', err);
+  }
+}
+
+export async function getFreeAccess(): Promise<boolean> {
+  try {
+    return (await AsyncStorage.getItem(FREE_ACCESS_KEY)) === 'yes';
+  } catch (err) {
+    console.log('Failed to read free access', err);
+    return false;
+  }
+}

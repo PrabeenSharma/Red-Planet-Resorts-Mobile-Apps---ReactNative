@@ -337,6 +337,12 @@ export default function Header() {
       const slug =
         await getScannedSlug();
 
+      // Guest users have nothing to clear.
+      if (!slug) {
+        router.push('/scanner');
+        return;
+      }
+
       /*
       |--------------------------------------------------------------------------
       | GET EXPO PUSH TOKEN

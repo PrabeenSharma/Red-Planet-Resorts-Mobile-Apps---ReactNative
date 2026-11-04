@@ -1,10 +1,30 @@
+import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { usePathname, useRouter } from 'expo-router';
+import { Href, usePathname, useRouter } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+
+import { isTicketOnlyRoute } from '@/constants/config';
+import useTicketAccess from '@/hooks/useTicketAccess';
+
+const ROWS: { route: string; label: string }[][] = [
+  [
+    { route: '/dashboard/DistanceProgressIndicator', label: 'Distance & Progress Indicators' },
+    { route: '/dashboard/EnvironmentalData', label: 'Environmental Data' },
+  ],
+  [
+    { route: '/dashboard/CommunicationMetrics', label: 'Communication Metrics' },
+    { route: '/dashboard/ShipsTracker', label: 'Ship Tracker' },
+  ],
+  [
+    { route: '/dashboard/WeeklyScheduleSnapshot', label: 'Weekly Schedule Snapshot' },
+    { route: '/dashboard/SolarData', label: 'Solar Data Graph' },
+  ],
+];
 
 export default function ButtonsGroup() {
   const router = useRouter();
   const pathname = usePathname(); 
+  const { hasTicket } = useTicketAccess();
 
   const isActive = (route: string) => pathname === route;
 
@@ -19,91 +39,35 @@ export default function ButtonsGroup() {
 
   return (
     <View>
-      
-      <View style={styles.row}>
-        <View style={styles.box}>
-          <Pressable onPress={() => router.push('/dashboard/DistanceProgressIndicator')}>
-            <LinearGradient colors={getColors('/dashboard/DistanceProgressIndicator') as any} 
-            start={{ x: 0.85, y: 0.15 }}
-            end={{ x: 0.15, y: 0.85 }} 
-            style={styles.anchorBox}>
-              <Text style={styles.text}>
-                Distance & Progress Indicators
-              </Text>
-            </LinearGradient>
-          </Pressable>
-        </View>
+      {ROWS.map((row, i) => (
+        <View key={i} style={styles.row}>
+          {row.map(({ route, label }) => {
+            const locked = hasTicket === false && isTicketOnlyRoute(route);
 
-        <View style={styles.box}>
-          <Pressable onPress={() => router.push('/dashboard/EnvironmentalData')}>
-            <LinearGradient colors={getColors('/dashboard/EnvironmentalData') as any} 
-            start={{ x: 0.85, y: 0.15 }}
-            end={{ x: 0.15, y: 0.85 }} 
-            style={styles.anchorBox}>
-              <Text style={styles.text}>
-                Environmental Data
-              </Text>
-            </LinearGradient>
-          </Pressable>
+            return (
+              <View key={route} style={styles.box}>
+                <Pressable
+                  disabled={locked}
+                  accessibilityState={{ disabled: locked }}
+                  accessibilityHint={locked ? 'Available to ticket holders' : undefined}
+                  onPress={() => router.push(route as Href)}
+                  style={locked && styles.locked}
+                >
+                  <LinearGradient colors={getColors(route) as any}
+                  start={{ x: 0.85, y: 0.15 }}
+                  end={{ x: 0.15, y: 0.85 }}
+                  style={styles.anchorBox}>
+                    {locked && (
+                      <Ionicons name="lock-closed" size={10} color="#F6D78B" style={styles.lockIcon} />
+                    )}
+                    <Text style={styles.text}>{label}</Text>
+                  </LinearGradient>
+                </Pressable>
+              </View>
+            );
+          })}
         </View>
-      </View>
-
-      <View style={styles.row}>
-        <View style={styles.box}>
-          <Pressable onPress={() => router.push('/dashboard/CommunicationMetrics')}>
-            <LinearGradient colors={getColors('/dashboard/CommunicationMetrics') as any} 
-            start={{ x: 0.85, y: 0.15 }}
-            end={{ x: 0.15, y: 0.85 }} 
-            style={styles.anchorBox}>
-              <Text style={styles.text}>
-                Communication Metrics
-              </Text>
-            </LinearGradient>
-          </Pressable>
-        </View>
-
-        <View style={styles.box}>
-          <Pressable onPress={() => router.push('/dashboard/ShipsTracker')}>
-            <LinearGradient colors={getColors('/dashboard/ShipsTracker') as any} 
-            start={{ x: 0.85, y: 0.15 }}
-            end={{ x: 0.15, y: 0.85 }} 
-            style={styles.anchorBox}>
-              <Text style={styles.text}>
-                Ship Tracker
-              </Text>
-            </LinearGradient>
-          </Pressable>
-        </View>
-      </View>
-
-      <View style={styles.row}>
-        <View style={styles.box}>
-          <Pressable onPress={() => router.push('/dashboard/WeeklyScheduleSnapshot')}>
-            <LinearGradient colors={getColors('/dashboard/WeeklyScheduleSnapshot') as any} 
-            start={{ x: 0.85, y: 0.15 }}
-            end={{ x: 0.15, y: 0.85 }} 
-            style={styles.anchorBox}>
-              <Text style={styles.text}>
-                Weekly Schedule Snapshot
-              </Text>
-            </LinearGradient>
-          </Pressable>
-        </View>
-
-        <View style={styles.box}>
-          <Pressable onPress={() => router.push('/dashboard/SolarData')}>
-            <LinearGradient colors={getColors('/dashboard/SolarData') as any} 
-            start={{ x: 0.85, y: 0.15 }}
-            end={{ x: 0.15, y: 0.85 }} 
-            style={styles.anchorBox}>
-              <Text style={styles.text}>
-                Solar Data Graph
-              </Text>
-            </LinearGradient>
-          </Pressable>
-        </View>
-      </View>
-
+      ))}
     </View>
   );
 }
@@ -111,6 +75,8 @@ export default function ButtonsGroup() {
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12,},
   box: { width: '48%',},
-  anchorBox: { width: '100%', height: 40, borderRadius: 40, justifyContent: 'center', alignItems: 'center',borderColor: 'rgba(101, 129, 135, 1)', borderWidth: 1, paddingHorizontal: 15,},
-  text: { color: '#fff', fontFamily: 'Audiowide_400Regular',  fontSize: 10, textAlign: 'center', },
+  anchorBox: { width: '100%', height: 40, borderRadius: 40, justifyContent: 'center', alignItems: 'center',borderColor: 'rgba(101, 129, 135, 1)', borderWidth: 1, paddingHorizontal: 15, flexDirection: 'row', gap: 5,},
+  text: { color: '#fff', fontFamily: 'Audiowide_400Regular',  fontSize: 10, textAlign: 'center', flexShrink: 1, },
+  locked: { opacity: 0.45 },
+  lockIcon: { flexShrink: 0 },
 });
