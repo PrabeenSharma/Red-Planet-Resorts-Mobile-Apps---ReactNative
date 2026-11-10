@@ -63,11 +63,17 @@ const REGISTRATION_KEY = 'user_registration';
 const FREE_ACCESS_KEY = 'free_access';
 
 export type Registration = {
-  fullName: string;
+  firstName: string;
+  lastName: string;
+  callSign: string;
+  city: string;
+  state: string;
+  country: string;
   email: string;
-  address: string;
   nasaId: string;
-  registeredAt: string;
+  instagramHandle: string;
+  discordUsername: string;
+  registeredAt?: string;
 };
 
 export async function saveRegistration(data: Registration): Promise<void> {

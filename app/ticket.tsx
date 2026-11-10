@@ -1,3 +1,4 @@
+import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import {
@@ -21,7 +22,9 @@ export default function TicketQuestionScreen() {
 
   useEffect(() => {
     getRegistration().then((r) => {
-      if (r?.fullName) setFirstName(r.fullName.trim().split(/\s+/)[0]);
+      if (r && 'fullName' in r && typeof r.fullName === 'string') {
+        setFirstName(r.fullName.trim().split(/\s+/)[0]);
+      }
     });
   }, []);
 
@@ -43,21 +46,33 @@ export default function TicketQuestionScreen() {
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.scroll}>
       <View style={styles.content}>
-        <Image
-          source={require('../assets/images/ticket.png')}
-          style={styles.ticketImage}
-          resizeMode="contain"
-        />
+          <LinearGradient
+            colors={[
+              'rgba(24, 58, 86, 0.2)',
+              'rgba(63, 125, 139, 0.2)',
+              'rgba(24, 58, 86, 0.2)',
+            ]}
+            locations={[0.0284, 0.5124, 0.9946]}
+            start={{ x: 0, y: 0.5 }}
+            end={{ x: 1, y: 0.5 }}
+            style={styles.congratulationBox}
+          >
+            <Image
+              source={require('../assets/images/checkMark.png')}
+              style={styles.ticketImage}
+              resizeMode="contain"
+            />
+            <Text style={styles.congratulationtext}>
+              Congratulations! Your Mars visa is approved.
+            </Text>
+        </LinearGradient>
 
         {firstName ? (
           <Text style={styles.greeting}>Welcome aboard, {firstName}</Text>
         ) : null}
 
-        <Text style={styles.title}>Do you have a ticket?</Text>
-        <Text style={styles.subtitle}>
-          Ticket holders unlock the full Mission Control Hub. No ticket? You can
-          still explore the dashboard as a guest.
-        </Text>
+        <Text style={styles.title}>Do you have a ticket to scan?</Text>
+       
 
         <View style={styles.buttons}>
           <GoldButton
@@ -89,7 +104,7 @@ export default function TicketQuestionScreen() {
 const styles = StyleSheet.create({
   scroll: { flexGrow: 1, justifyContent: 'center', alignItems: 'center', paddingVertical: 30 },
   content: { width: '100%', maxWidth: 520, paddingHorizontal: 28, alignItems: 'center' },
-  ticketImage: { width: 161, height: 105, marginBottom: 24 },
+  ticketImage: { width: 60, height: 60, marginBottom: 20 },
   greeting: {
     color: '#F6D78B',
     fontFamily: 'Audiowide_400Regular',
@@ -123,4 +138,6 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     textTransform: 'uppercase',
   },
+  congratulationBox:{ borderWidth:1, borderColor:'#658187', borderRadius:10,  width:'100%', paddingTop:30, paddingBottom:30, alignItems:'center', marginBottom:55, paddingLeft:20, paddingRight:20,},
+  congratulationtext:{ fontFamily: 'Audiowide_400Regular', fontSize: 22, lineHeight:32, color:'#fff', textTransform:'uppercase', textAlign:'center', },
 });

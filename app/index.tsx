@@ -1,16 +1,16 @@
+import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
-  Image,
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   useWindowDimensions,
-  View,
+  View
 } from 'react-native';
 
-import GoldButton from '@/components/GoldButton';
 import {
   getFreeAccess,
   getRegistration,
@@ -74,33 +74,33 @@ export default function WelcomeScreen() {
       contentContainerStyle={styles.scroll}
     >
       <View style={[styles.content, { width: contentWidth }]}>
-        <View style={[styles.planetGlow, { width: planetSize + 40, height: planetSize + 40, borderRadius: (planetSize + 40) / 2 }]}>
-          <View style={{ width: planetSize, height: planetSize, borderRadius: planetSize / 2, overflow: 'hidden' }}>
-            <Image
-              source={require('../assets/images/mars.gif')}
-              style={{ width: planetSize, height: planetSize }}
-              resizeMode="cover"
-            />
-          </View>
-        </View>
+        
 
-        <Text style={styles.kicker}>Red Planet Resorts</Text>
 
-        <Text style={styles.title}>Welcome to{'\n'}Red Planet Resorts</Text>
+        <Text style={styles.title}>Your Journey to Mars Begins Here</Text>
 
-        <View style={styles.divider} />
 
         <Text style={styles.subtitle}>
-          Experience the way space travel was always meant to be. With the
-          luxury of Red Planet Resorts.
+           You are now free to dream. {'\n'} Build for the Red Planet. {'\n'}Thrive on the Blue one.
         </Text>
 
-        <GoldButton
-          testID="get-started"
-          title="Get Started"
-          onPress={() => router.push('/register')}
-          style={styles.cta}
-        />
+        
+
+        <TouchableOpacity style={{ alignSelf:'center', width:'100%', alignItems:'center',  }} onPress={() => router.push('/register')}>
+            <LinearGradient
+              colors={['#0C2046', '#004F99']}
+              locations={[0.1624, 0.816]}
+              start={{ x: 0.85, y: 0.15 }}
+              end={{ x: 0.15, y: 0.85 }}
+              style={styles.optionGradient}
+            >
+              <Text style={styles.optionText}>
+                Get Started
+              </Text>
+            </LinearGradient>
+          </TouchableOpacity>
+
+
       </View>
     </ScrollView>
   );
@@ -110,47 +110,9 @@ const styles = StyleSheet.create({
   loading: { justifyContent: 'center', alignItems: 'center' },
   scroll: { flexGrow: 1, justifyContent: 'center', alignItems: 'center', paddingVertical: 30 },
   content: { paddingHorizontal: 28, alignItems: 'center' },
-  planetGlow: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 28,
-    backgroundColor: 'rgba(212, 166, 58, 0.06)',
-    borderWidth: 1,
-    borderColor: 'rgba(246, 215, 139, 0.35)',
-    shadowColor: '#FF6A2B',
-    shadowOpacity: 0.6,
-    shadowRadius: 30,
-    shadowOffset: { width: 0, height: 0 },
-  },
-  kicker: {
-    color: '#F6D78B',
-    fontFamily: 'Audiowide_400Regular',
-    fontSize: 12,
-    letterSpacing: 4,
-    textTransform: 'uppercase',
-    marginBottom: 12,
-  },
-  title: {
-    color: '#fff',
-    fontFamily: 'Audiowide_400Regular',
-    fontSize: 30,
-    lineHeight: 40,
-    textAlign: 'center',
-  },
-  divider: {
-    width: 70,
-    height: 2,
-    backgroundColor: '#D4A63A',
-    borderRadius: 2,
-    marginVertical: 20,
-  },
-  subtitle: {
-    color: '#CCF6FF',
-    fontFamily: 'Audiowide_400Regular',
-    fontSize: 13,
-    lineHeight: 22,
-    textAlign: 'center',
-    marginBottom: 36,
-  },
-  cta: { alignSelf: 'stretch' },
+  title: {  color: '#fff',  fontFamily: 'Audiowide_400Regular', fontSize: 30, lineHeight: 40, textAlign: 'center',  textTransform: 'uppercase',  marginBottom: 40, },
+  subtitle: {  color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 13, lineHeight: 22, textAlign: 'center', marginBottom: 36, textTransform: 'uppercase', },
+  optionGradient: { height: 55,  borderRadius: 6, justifyContent: 'center', alignItems: 'center', paddingHorizontal:15, maxWidth:350, width:'100%', },
+  optionText: {  fontFamily: 'Audiowide_400Regular',  fontSize: 16,  textTransform: 'uppercase',  color: '#fff',},
+
 });

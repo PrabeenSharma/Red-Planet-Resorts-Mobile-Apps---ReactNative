@@ -1,3 +1,4 @@
+
 import { LinearGradient } from 'expo-linear-gradient';
 import {
   ActivityIndicator,
@@ -51,9 +52,15 @@ export default function GoldButton({
     >
       <LinearGradient
         colors={GRADIENTS[variant]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.gradient}
+        locations={
+          variant === 'blue' ? [0.1624, 0.816] : undefined
+        }
+        start={variant === 'blue' ? { x: 0.85, y: 0.15 } : { x: 0, y: 0 }}
+        end={variant === 'blue' ? { x: 0.15, y: 0.85 } : { x: 1, y: 1 }}
+        style={[
+          styles.gradient,
+          variant === 'blue' && styles.gradientBlue,
+        ]}
       >
         {loading ? (
           <ActivityIndicator color={variant === 'gold' ? '#000' : '#fff'} />
@@ -79,16 +86,31 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 0 },
     elevation: 6,
   },
+
   wrapperBlue: {
-    borderColor: 'rgba(101, 129, 135, 1)',
+    borderWidth: 0,
+    borderRadius: 6,
     shadowColor: '#004F99',
+    shadowOpacity: 0,
+    elevation: 0,
   },
+
   gradient: {
     minHeight: 52,
     paddingHorizontal: 28,
     justifyContent: 'center',
     alignItems: 'center',
   },
+
+  gradientBlue: {
+    height: 55,
+    minHeight: 55,
+    width: '100%',
+    maxWidth: 350,
+    borderRadius: 6,
+    paddingHorizontal: 15,
+  },
+
   text: {
     color: '#000',
     fontFamily: 'Audiowide_400Regular',
@@ -96,7 +118,19 @@ const styles = StyleSheet.create({
     letterSpacing: 1.5,
     textTransform: 'uppercase',
   },
-  textBlue: { color: '#fff' },
-  pressed: { transform: [{ scale: 0.98 }], opacity: 0.9 },
-  disabled: { opacity: 0.6 },
+
+  textBlue: {
+    color: '#fff',
+    fontSize: 16,
+    letterSpacing: 0,
+  },
+
+  pressed: {
+    transform: [{ scale: 0.98 }],
+    opacity: 0.9,
+  },
+
+  disabled: {
+    opacity: 0.6,
+  },
 });
