@@ -5,12 +5,11 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useWindowDimensions } from 'react-native';
 import RenderHTML from 'react-native-render-html';
 
+import { WebView } from 'react-native-webview';
 import InstagramFeed from '../../components/InstagramFeed';
 import SpaceHistory from '../../components/SpaceHistory';
 import SpaceNews from '../../components/SpaceNews';
 import SubmitStoryModal from '../../components/SubmitYoursForm';
-import { WebView } from 'react-native-webview';
-import YoutubePlayer from "react-native-youtube-iframe";
 
 import { useState } from 'react';
 
@@ -28,7 +27,6 @@ import {
   View
 } from 'react-native';
 
-import FreeUserBanner from '@/components/FreeUserBanner';
 import { isTicketOnlyRoute } from '@/constants/config';
 import useMissionPage from '@/hooks/useMissionPage';
 import { Ionicons } from '@expo/vector-icons';
@@ -145,56 +143,68 @@ if (loading) {
   <ScrollView style={{ flex: 1 }}>
     <View style={{ flex: 1 }}>
       <View style={styles.mainContent}>
-        {isFreeUser && <FreeUserBanner />}
+        
+        {isFreeUser && (
+          <Text>Free User</Text>
+        )}
 
-        <Text style={styles.mainHeading}>Mission information</Text>
+      {!isFreeUser && (
+        <View>
+          <Text style={styles.mainHeading}>Mission information</Text>
 
-        <View style={styles.thereeColumns}>
-          <View style={{ width: '31%' }}>
-            <View style={styles.topContentHolder}>
-              <Text style={styles.topHeading}>Starship Sagan:</Text>
-              <Text style={styles.topContent}>
-                {page?.acf?.mission_code}
-              </Text>
+          <View style={styles.thereeColumns}>
+            <View style={{ width: '31%' }}>
+              <View style={styles.topContentHolder}>
+                <Text style={styles.topHeading}>Starship Sagan:</Text>
+                <Text style={styles.topContent}>
+                  {page?.acf?.mission_code}
+                </Text>
+              </View>
+              <View style={styles.topContentHolder}>
+                <Text style={styles.topHeading}>Mission Status:</Text>
+                <Text style={styles.topContent}>
+                  {page?.acf?.mission_status}
+                </Text>
+              </View>
             </View>
-            <View style={styles.topContentHolder}>
-              <Text style={styles.topHeading}>Mission Status:</Text>
-              <Text style={styles.topContent}>
-                {page?.acf?.mission_status}
-              </Text>
-            </View>
-          </View>
 
-          <View style={{ width: '25%' }}>
-            <View style={styles.topContentHolder}>
-              <Text style={styles.topHeading}>Launch Date:</Text>
-              <Text style={styles.topContent}>
-                {formatDate(page?.acf?.launch_date || '')}
-              </Text>
+            <View style={{ width: '25%' }}>
+              <View style={styles.topContentHolder}>
+                <Text style={styles.topHeading}>Launch Date:</Text>
+                <Text style={styles.topContent}>
+                  {formatDate(page?.acf?.launch_date || '')}
+                </Text>
+              </View>
+              <View style={styles.topContentHolder}>
+                <Text style={styles.topHeading}>Return Date:</Text>
+                <Text style={styles.topContent}>
+                  {formatDate(page?.acf?.rtn_date || '')}
+                </Text>
+              </View>
             </View>
-            <View style={styles.topContentHolder}>
-              <Text style={styles.topHeading}>Return Date:</Text>
-              <Text style={styles.topContent}>
-                {formatDate(page?.acf?.rtn_date || '')}
-              </Text>
-            </View>
-          </View>
 
-          <View style={{ width: '35%' }}>
-            <View style={styles.topContentHolder}>
-              <Text style={styles.topHeading}>Mission Duration:</Text>
-              <Text style={styles.topContent}>
-                {page?.acf?.mission_duration}
-              </Text>
-            </View>
-            <View style={styles.topContentHolder}>
-              <Text style={styles.topHeading}>Crew Count:</Text>
-              <Text style={styles.topContent}>
-                {page?.acf?.crew_count}
-              </Text>
+            <View style={{ width: '35%' }}>
+              <View style={styles.topContentHolder}>
+                <Text style={styles.topHeading}>Mission Duration:</Text>
+                <Text style={styles.topContent}>
+                  {page?.acf?.mission_duration}
+                </Text>
+              </View>
+              <View style={styles.topContentHolder}>
+                <Text style={styles.topHeading}>Crew Count:</Text>
+                <Text style={styles.topContent}>
+                  {page?.acf?.crew_count}
+                </Text>
+              </View>
             </View>
           </View>
         </View>
+        )}
+
+
+
+        {!isFreeUser && (
+  <>
 
         {(() => {
         const rtn = page?.acf?.rtn_date;
@@ -293,6 +303,12 @@ if (loading) {
             </View>
           </ImageBackground>
         </View>
+
+   </>
+)}
+
+
+       
         <View style={{ flexDirection:'row', gap:11,marginVertical:15,}}>
           <TouchableOpacity onPress={() => Linking.openURL(page?.acf?.earth_view)} style={{ flexGrow:1}}>
             <LinearGradient
@@ -529,7 +545,7 @@ if (loading) {
               >
               
                   <Image
-                    source={{ uri: page.mc_image_url  }}
+                    source={{ uri: page.mars_community_image  }}
                     style={{ width: '100%' , aspectRatio: 1,}} resizeMode="cover"
                   />
                   

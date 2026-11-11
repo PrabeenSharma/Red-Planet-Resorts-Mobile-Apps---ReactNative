@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 
 import { FREE_DASHBOARD_SLUG } from '@/constants/config';
@@ -5,49 +6,167 @@ import useTicketAccess from '@/hooks/useTicketAccess';
 
 const pageCache: Record<string, any> = {};
 
+const THEME_OPTIONS_URL =
+  'https://trip.redplanetresorts.com/wp-json/rpr/v1/theme-options';
+
+const WP_PAGES_URL =
+  'https://trip.redplanetresorts.com/wp-json/wp/v2/pages?slug=';
+
 export default function useMissionPage(slugParam?: string) {
   const [page, setPage] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   const { ticketSlug, hasTicket } = useTicketAccess(slugParam);
 
-  // Users without a ticket see the public mission page.
-  const slug = hasTicket === null ? null : ticketSlug || FREE_DASHBOARD_SLUG;
+  // Wait until ticket access is checked.
+  const isFreeUser = hasTicket === false;
 
-  // api call
+  // Ticket users use their scanned slug.
+  // Free users use the common theme-options API.
+  const slug =
+    hasTicket === null
+      ? null
+      : isFreeUser
+        ? FREE_DASHBOARD_SLUG
+        : ticketSlug;
+
   useEffect(() => {
-    if (!slug) return;
+    if (hasTicket === null || (!isFreeUser && !slug)) {
+      return;
+    }
+
+    const controller = new AbortController();
 
     const fetchData = async () => {
       try {
         setLoading(true);
 
-        // 🔥 1. CACHE CHECK
-        if (pageCache[slug]) {
-          setPage(pageCache[slug]);
+        // Separate cache keys for Free and Ticket users.
+        const cacheKey = isFreeUser
+          ? 'free-theme-options'
+          : `ticket-${slug}`;
+
+        // 1. CACHE CHECK
+        if (pageCache[cacheKey]) {
+          setPage(pageCache[cacheKey]);
           setLoading(false);
           return;
         }
 
-        // 🌐 2. API CALL
-        const res = await fetch(
-          `https://trip.redplanetresorts.com/wp-json/wp/v2/pages?slug=${slug}`
-        );
-        const data = await res.json();
-        const result = data?.[0] || null;
+        let result: any = null;
 
-        pageCache[slug] = result;
+        // 2. FREE USER API
+        if (isFreeUser) {
+          const response = await fetch(THEME_OPTIONS_URL, {
+            signal: controller.signal,
+          });
+
+          if (!response.ok) {
+            throw new Error(
+              `Theme Options API Error: ${response.status}`
+            );
+          }
+
+          const data = await response.json();
+
+          if (!data?.success || !data?.theme_options) {
+            throw new Error('Invalid Theme Options API response');
+          }
+
+          const options = data.theme_options;
+
+          // Map available theme options to dashboard fields.
+          result = {
+            ...options,
+
+            mc_image_url: options.mars_community_image,
+
+            acf: {
+              mars_community_heading:
+                options.mars_community_heading,
+
+              mc_sub_heading:
+                options.mars_community_subheading,
+
+              mc_content:
+                options.mars_community_desc,
+
+              product_title:
+                options.product_title,
+
+              product_sub_title:
+                options.product_sub_title,
+
+              product_price:
+                options.product_price,
+
+              product_description:
+                options.product_description,
+
+              product_image:
+                options.product_image,
+
+              product_url:
+                options.product_url,
+
+              insta_heading:
+                options.insta_heading,
+
+              insta_url:
+                options.insta_url,
+
+              wind_prediction_image:
+                options.wind_prediction_image,
+            },
+          };
+        }
+
+        // 3. TICKET USER API
+        else {
+          const response = await fetch(
+            `${WP_PAGES_URL}${encodeURIComponent(slug!)}`,
+            {
+              signal: controller.signal,
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error(
+              `WordPress Page API Error: ${response.status}`
+            );
+          }
+
+          const data = await response.json();
+
+          result = data?.[0] || null;
+        }
+
+        // 4. SAVE CACHE
+        pageCache[cacheKey] = result;
 
         setPage(result);
-      } catch (err) {
-        console.log(err);
+      } catch (error: any) {
+        if (error.name !== 'AbortError') {
+          console.log('Mission Page API Error:', error);
+          setPage(null);
+        }
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       }
     };
 
     fetchData();
-  }, [slug]);
 
-  return { page, loading, isFreeUser: hasTicket === false };
+    return () => {
+      controller.abort();
+    };
+  }, [slug, hasTicket, isFreeUser]);
+
+  return {
+    page,
+    loading,
+    isFreeUser,
+  };
 }

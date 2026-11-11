@@ -12,32 +12,57 @@ const SpaceHistory = () => {
   const [events, setEvents] = useState<SpaceHistoryEvent[]>([]);
 
   useEffect(() => {
-    const today = new Date();
+  const today = new Date();
 
-    // Example: "May 2"
-    const todayMonthDay = today.toLocaleDateString('en-US', {
-      month: 'long',
-      day: 'numeric',
-    });
+  const todayMonth = today.getMonth();
+  const todayDate = today.getDate();
 
-    fetch(
-      'https://trip.redplanetresorts.com/wp-content/themes/red-planet-resort/assets/data/space_history.json'
-    )
-      .then(res => res.json())
-      .then(data => {
+  console.log('Device Date:', today.toString());
+  console.log('Today Month:', todayMonth);
+  console.log('Today Date:', todayDate);
 
-        const todaysEvents = data.filter((event: SpaceHistoryEvent) => {
+  fetch(
+    'https://trip.redplanetresorts.com/wp-content/themes/red-planet-resort/assets/data/space_history.json'
+  )
+    .then(res => {
+      console.log('API Status:', res.status);
+      return res.json();
+    })
+    .then(data => {
+      console.log('Total Events:', data.length);
 
-          // "May 2, 1989" → "May 2"
-          const eventMonthDay = event.date.split(',')[0].trim();
+      const todaysEvents = data.filter((event: SpaceHistoryEvent) => {
+        if (!event.date) return false;
 
-          return eventMonthDay === todayMonthDay;
-        });
+        const match = event.date.match(
+          /^([A-Za-z]+)\s+(\d+),\s*(\d{4})$/
+        );
 
-        setEvents(todaysEvents);
-      })
-      .catch(err => console.log(err));
-  }, []);
+        if (!match) return false;
+
+        const eventMonth = new Date(
+          `${match[1]} 1, 2000`
+        ).getMonth();
+
+        const eventDate = parseInt(match[2], 10);
+
+        return (
+          eventMonth === todayMonth &&
+          eventDate === todayDate
+        );
+      });
+
+      console.log('November 11 Events:', data.filter(
+        (event: SpaceHistoryEvent) =>
+          event.date?.startsWith('November 11,')
+      ));
+
+      console.log('Matched Events:', todaysEvents);
+
+      setEvents(todaysEvents);
+    })
+    .catch(err => console.log('Space History Error:', err));
+}, []);
 
   return (
     <View style={{ paddingHorizontal: 17, paddingBottom: 17 }}>
