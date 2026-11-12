@@ -20,7 +20,7 @@ const SpaceHistory = () => {
   console.log('Device Date:', today.toString());
 
   fetch(
-    'https://trip.redplanetresorts.com/wp-content/themes/red-planet-resort/assets/data/space_history.json'
+    'https://trip.redplanetresorts.com/wp-json/rpr/v1/space-history'
   )
     .then(res => {
       console.log('API Status:', res.status);
