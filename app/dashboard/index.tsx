@@ -11,6 +11,8 @@ import SpaceHistory from '../../components/SpaceHistory';
 import SpaceNews from '../../components/SpaceNews';
 import SubmitStoryModal from '../../components/SubmitYoursForm';
 
+
+
 import { useState } from 'react';
 
 import {
@@ -143,6 +145,197 @@ if (loading) {
   <ScrollView style={{ flex: 1 }}>
     <View style={{ flex: 1 }}>
       <View style={styles.mainContent}>
+
+        {isFreeUser && (
+          
+            
+              <View>
+                <Text style={styles.headingCenter}>Mission Control Hub</Text>
+                <View style={styles.row}>
+                  <View style={styles.box}>
+                    <Pressable style={({ pressed }) => [
+                          styles.linkStyle,
+                          pressed && styles.pressed,
+                          isLocked('/dashboard/DistanceProgressIndicator') && styles.locked,
+                        ]}
+                        disabled={isLocked('/dashboard/DistanceProgressIndicator')}
+                        accessibilityState={{ disabled: isLocked('/dashboard/DistanceProgressIndicator') }}
+                        onPress={() => router.push('/dashboard/DistanceProgressIndicator')}>
+                        <LinearGradient
+                          colors={[
+                            'rgba(24,58,86,0.2)',
+                            'rgba(63,125,139,0.2)',
+                            'rgba(24,58,86,0.2)',
+                          ]}
+                          locations={[0.03, 0.51, 0.99]}
+                          start={{ x: 0, y: 0 }}  
+                          end={{ x: 1, y: 0 }}  
+                          style={styles.anchorBox}
+                        >
+                        {isLocked('/dashboard/DistanceProgressIndicator') }
+                        <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 10, fontWeight: '400', textTransform: 'uppercase', marginBottom:0, textAlign: 'center' }}>Distance & Progress{'\n'}Indicators</Text>
+                      </LinearGradient>
+                    </Pressable>
+                  </View>
+                  <View style={styles.box}>
+                    <Pressable style={({ pressed }) => [
+                          styles.linkStyle,
+                          pressed && styles.pressed
+                        ]}
+                        onPress={() => router.push('/dashboard/EnvironmentalData')}>
+                        <LinearGradient
+                          colors={[
+                            'rgba(24,58,86,0.2)',
+                            'rgba(63,125,139,0.2)',
+                            'rgba(24,58,86,0.2)',
+                          ]}
+                          locations={[0.03, 0.51, 0.99]}
+                          start={{ x: 0, y: 0 }}  
+                          end={{ x: 1, y: 0 }}  
+                          style={styles.anchorBox}
+                        >
+                        <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 10, fontWeight: '400', textTransform: 'uppercase', marginBottom:0, textAlign: 'center' }}>Environmental{'\n'}Data</Text>
+                      </LinearGradient>
+                    </Pressable>
+                  </View>
+                </View>
+
+                <View style={styles.row}>
+                  <View style={styles.box}>
+                    <Pressable style={({ pressed }) => [
+                          styles.linkStyle,
+                          pressed && styles.pressed,
+                          isLocked('/dashboard/CommunicationMetrics') && styles.locked,
+                        ]}
+                        disabled={isLocked('/dashboard/CommunicationMetrics')}
+                        accessibilityState={{ disabled: isLocked('/dashboard/CommunicationMetrics') }}
+                        onPress={() => router.push('/dashboard/CommunicationMetrics')}>
+                        <LinearGradient
+                          colors={[
+                            'rgba(24,58,86,0.2)',
+                            'rgba(63,125,139,0.2)',
+                            'rgba(24,58,86,0.2)',
+                          ]}
+                          locations={[0.03, 0.51, 0.99]}
+                          start={{ x: 0, y: 0 }}  
+                          end={{ x: 1, y: 0 }}  
+                          style={styles.anchorBox}
+                        >
+                        {isLocked('/dashboard/CommunicationMetrics')}
+                        <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 10, fontWeight: '400', textTransform: 'uppercase', marginBottom:0, textAlign: 'center' }}>Communication{'\n'}Metrics</Text>
+                      </LinearGradient>
+                    </Pressable>
+                  </View>
+                  <View style={styles.box}>
+                    <Pressable style={({ pressed }) => [
+                          styles.linkStyle,
+                          pressed && styles.pressed,
+                          isLocked('/dashboard/ShipsTracker') && styles.locked,
+                        ]}
+                        disabled={isLocked('/dashboard/ShipsTracker')}
+                        accessibilityState={{ disabled: isLocked('/dashboard/ShipsTracker') }}
+                        onPress={() => router.push('/dashboard/ShipsTracker')}>
+                        <LinearGradient
+                          colors={[
+                            'rgba(24,58,86,0.2)',
+                            'rgba(63,125,139,0.2)',
+                            'rgba(24,58,86,0.2)',
+                          ]}
+                          locations={[0.03, 0.51, 0.99]}
+                          start={{ x: 0, y: 0 }}  
+                          end={{ x: 1, y: 0 }}  
+                          style={styles.anchorBox}
+                        >
+                        {isLocked('/dashboard/ShipsTracker')}
+                        <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 10, fontWeight: '400', textTransform: 'uppercase', marginBottom:0, textAlign: 'center' }}>Ship{'\n'}Tracker</Text>
+                      </LinearGradient>
+                    </Pressable>
+                  </View>
+                </View>
+
+                <View style={styles.row}>
+                  <View style={styles.box}>
+                    <Pressable style={({ pressed }) => [
+                          styles.linkStyle,
+                          pressed && styles.pressed
+                        ]}
+                        onPress={() => router.push('/dashboard/WeeklyScheduleSnapshot')}>
+                        <LinearGradient
+                          colors={[
+                            'rgba(24,58,86,0.2)',
+                            'rgba(63,125,139,0.2)',
+                            'rgba(24,58,86,0.2)',
+                          ]}
+                          locations={[0.03, 0.51, 0.99]}
+                          start={{ x: 0, y: 0 }}  
+                          end={{ x: 1, y: 0 }}  
+                          style={styles.anchorBox}
+                        >
+                        <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 10, fontWeight: '400', textTransform: 'uppercase', marginBottom:0, textAlign: 'center' }}>Weekly Schedule{'\n'}Snapshot</Text>
+                      </LinearGradient>
+                    </Pressable>
+                  </View>
+                  <View style={styles.box}>
+                    <Pressable style={({ pressed }) => [
+                          styles.linkStyle,
+                          pressed && styles.pressed
+                        ]}
+                        onPress={() => router.push('/dashboard/SolarData')}>
+                        <LinearGradient
+                          colors={[
+                            'rgba(24,58,86,0.2)',
+                            'rgba(63,125,139,0.2)',
+                            'rgba(24,58,86,0.2)',
+                          ]}
+                          locations={[0.03, 0.51, 0.99]}
+                          start={{ x: 0, y: 0 }}  
+                          end={{ x: 1, y: 0 }}  
+                          style={styles.anchorBox}
+                        >
+                        <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 10, fontWeight: '400', textTransform: 'uppercase', marginBottom:0, textAlign: 'center' }}>Solar Data{'\n'}Graph</Text>
+                      </LinearGradient>
+                    </Pressable>
+                  </View>
+                </View>
+                <View style={styles.hsitoryContainer}>
+
+                </View>
+
+
+                 <Pressable style={({ pressed }) => [
+                          styles.linkStyle,
+                          pressed && styles.pressed,
+                          isLocked('/dashboard/ShipsTracker') && styles.locked,
+                        ]}
+                        disabled={isLocked('/dashboard/ShipsTracker')}
+                        accessibilityState={{ disabled: isLocked('/dashboard/ShipsTracker') }}
+                        onPress={() => router.push('/dashboard/ShipsTracker')}>
+                        <LinearGradient
+                          colors={[
+                            'rgba(24,58,86,0.2)',
+                            'rgba(63,125,139,0.2)',
+                            'rgba(24,58,86,0.2)',
+                          ]}
+                          locations={[0.03, 0.51, 0.99]}
+                          start={{ x: 0, y: 0 }}  
+                          end={{ x: 1, y: 0 }}  
+                          style={styles.anchorBox}
+                        >
+                        {isLocked('/dashboard/ShipsTracker')}
+                        <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 10, fontWeight: '400', textTransform: 'uppercase', marginBottom:0, textAlign: 'center' }}>Captain's Log</Text>
+                      </LinearGradient>
+                    </Pressable>
+
+              </View>
+            
+
+           
+
+
+        )}
+
+
+        
         
         {isFreeUser && (
           <Text style={{ color:'#fff' }}>Free User</Text>
