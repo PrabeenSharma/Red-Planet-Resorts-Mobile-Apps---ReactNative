@@ -145,7 +145,7 @@ if (loading) {
       <View style={styles.mainContent}>
         
         {isFreeUser && (
-          <Text>Free User</Text>
+          <Text style={{ color:'#fff' }}>Free User</Text>
         )}
 
       {!isFreeUser && (
@@ -544,13 +544,37 @@ if (loading) {
                   style={styles.historyBox}
               >
               
-                  <Image
-                    source={{ uri: page.mars_community_image  }}
-                    style={{ width: '100%' , aspectRatio: 1,}} resizeMode="cover"
-                  />
                   
-                  <Text style={styles.communityHeading}>{ page?.acf?.mc_sub_heading }</Text>
-                  <Text style={styles.communityContent}>{ page?.acf?.mc_content ?.replace(/<br\s*\/?>/gi, '\n')}</Text>
+
+                  {isFreeUser && (
+                    <>
+                      <Image
+                        source={{ uri: page.mc_image_url_free  }}
+                        style={{ width: '100%' , aspectRatio: 1,}} resizeMode="cover"
+                      />
+
+                      <Text style={styles.communityHeading}>{ page?.acf?.mc_sub_heading_free }</Text>
+                      <Text style={styles.communityContent}>{ page?.acf?.mc_content_free ?.replace(/<br\s*\/?>/gi, '\n')}</Text>
+
+                      </>
+                  )}
+
+                  {!isFreeUser && (
+                    <>
+                      <Image
+                        source={{ uri: page.mc_image_url  }}
+                        style={{ width: '100%' , aspectRatio: 1,}} resizeMode="cover"
+                      />
+                      <Text style={styles.communityHeading}>{ page?.acf?.mc_sub_heading }</Text>
+                      <Text style={styles.communityContent}>{ page?.acf?.mc_content ?.replace(/<br\s*\/?>/gi, '\n')}</Text>
+
+                      </>
+                  )}
+
+                  
+                  
+
+                  
 
                   {submitted ? (
                   <Text style={[styles.optionText, { textAlign: 'center', marginTop: 10 }]}>

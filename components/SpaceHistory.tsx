@@ -18,17 +18,20 @@ const SpaceHistory = () => {
   const todayDate = today.getDate();
 
   console.log('Device Date:', today.toString());
-  console.log('Today Month:', todayMonth);
-  console.log('Today Date:', todayDate);
 
   fetch(
     'https://trip.redplanetresorts.com/wp-content/themes/red-planet-resort/assets/data/space_history.json'
   )
     .then(res => {
       console.log('API Status:', res.status);
+
+      if (!res.ok) {
+        throw new Error(`HTTP Error: ${res.status}`);
+      }
+
       return res.json();
     })
-    .then(data => {
+    .then((data: SpaceHistoryEvent[]) => {
       console.log('Total Events:', data.length);
 
       const todaysEvents = data.filter((event: SpaceHistoryEvent) => {
@@ -52,16 +55,13 @@ const SpaceHistory = () => {
         );
       });
 
-      console.log('November 11 Events:', data.filter(
-        (event: SpaceHistoryEvent) =>
-          event.date?.startsWith('November 11,')
-      ));
-
       console.log('Matched Events:', todaysEvents);
 
       setEvents(todaysEvents);
     })
-    .catch(err => console.log('Space History Error:', err));
+    .catch(err => {
+      console.log('Space History Error:', err);
+    });
 }, []);
 
   return (

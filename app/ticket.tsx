@@ -40,7 +40,7 @@ export default function TicketQuestionScreen() {
     if (busy) return;
     setBusy(true);
     await saveFreeAccess(true);
-    router.replace('/dashboard');
+    router.replace('/notification-settings');
   };
 
   return (

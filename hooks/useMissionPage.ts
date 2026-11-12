@@ -18,11 +18,8 @@ export default function useMissionPage(slugParam?: string) {
 
   const { ticketSlug, hasTicket } = useTicketAccess(slugParam);
 
-  // Wait until ticket access is checked.
   const isFreeUser = hasTicket === false;
 
-  // Ticket users use their scanned slug.
-  // Free users use the common theme-options API.
   const slug =
     hasTicket === null
       ? null
@@ -31,7 +28,13 @@ export default function useMissionPage(slugParam?: string) {
         : ticketSlug;
 
   useEffect(() => {
-    if (hasTicket === null || (!isFreeUser && !slug)) {
+    // Wait until ticket access is checked.
+    if (hasTicket === null) return;
+
+    // Validate ticket user slug.
+    if (!isFreeUser && !slug) {
+      setPage(null);
+      setLoading(false);
       return;
     }
 
@@ -41,13 +44,14 @@ export default function useMissionPage(slugParam?: string) {
       try {
         setLoading(true);
 
-        // Separate cache keys for Free and Ticket users.
         const cacheKey = isFreeUser
           ? 'free-theme-options'
           : `ticket-${slug}`;
 
         // 1. CACHE CHECK
-        if (pageCache[cacheKey]) {
+        if (
+          Object.prototype.hasOwnProperty.call(pageCache, cacheKey)
+        ) {
           setPage(pageCache[cacheKey]);
           setLoading(false);
           return;
@@ -75,20 +79,19 @@ export default function useMissionPage(slugParam?: string) {
 
           const options = data.theme_options;
 
-          // Map available theme options to dashboard fields.
           result = {
             ...options,
 
-            mc_image_url: options.mars_community_image,
+            mc_image_url_free: options.mars_community_image,
 
             acf: {
-              mars_community_heading:
+              mars_community_heading_free:
                 options.mars_community_heading,
 
-              mc_sub_heading:
+              mc_sub_heading_free:
                 options.mars_community_subheading,
 
-              mc_content:
+              mc_content_free:
                 options.mars_community_desc,
 
               product_title:
@@ -145,11 +148,15 @@ export default function useMissionPage(slugParam?: string) {
         pageCache[cacheKey] = result;
 
         setPage(result);
-      } catch (error: any) {
-        if (error.name !== 'AbortError') {
-          console.log('Mission Page API Error:', error);
-          setPage(null);
+
+      } catch (error: unknown) {
+        if (error instanceof Error && error.name === 'AbortError') {
+          return;
         }
+
+        console.log('Mission Page API Error:', error);
+        setPage(null);
+
       } finally {
         if (!controller.signal.aborted) {
           setLoading(false);
@@ -162,6 +169,7 @@ export default function useMissionPage(slugParam?: string) {
     return () => {
       controller.abort();
     };
+
   }, [slug, hasTicket, isFreeUser]);
 
   return {

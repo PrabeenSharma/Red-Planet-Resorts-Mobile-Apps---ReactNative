@@ -446,7 +446,6 @@ export default function RegisterScreen() {
           <FormField
             ref={instagramRef}
             label="Instagram Handle"
-            hint="Optional — without @"
             value={values.instagramHandle}
             error={errors.instagramHandle}
             onChangeText={(v) => setField('instagramHandle', v)}
@@ -464,7 +463,6 @@ export default function RegisterScreen() {
           <FormField
             ref={discordRef}
             label="Discord Username"
-            hint="Optional"
             value={values.discordUsername}
             error={errors.discordUsername}
             onChangeText={(v) => setField('discordUsername', v)}
