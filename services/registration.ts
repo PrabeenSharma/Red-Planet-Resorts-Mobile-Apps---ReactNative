@@ -154,3 +154,43 @@ export async function submitRegistration(
   await submitToWordPress(payload);
 
 }
+
+
+// Update an existing WordPress registration using the previous saved identity
+// values, then persist the edited profile on the device.
+export async function updateRegistration(
+  identity: {
+    currentEmail: string;
+    currentCallSign: string;
+    currentNasaId: string;
+  },
+  payload: RegistrationPayload
+): Promise<void> {
+  const data = await fetchJson(`${WP_REGISTER_URL.replace(/\/register-user\/?$/, '')}/account-update`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      current_email: identity.currentEmail,
+      current_call_sign: identity.currentCallSign,
+      current_nasa_id: identity.currentNasaId,
+      first_name: payload.firstName,
+      last_name: payload.lastName,
+      call_sign: payload.callSign,
+      city: payload.city,
+      state: payload.state,
+      country: payload.country,
+      email: payload.email,
+      nasa_id: payload.nasaId,
+      instagram_handle: payload.instagramHandle,
+      discord_username: payload.discordUsername,
+      platform: Platform.OS,
+    }),
+  });
+
+  if (!data?.success) {
+    throw new Error(data?.message || 'WordPress account update failed.');
+  }
+}

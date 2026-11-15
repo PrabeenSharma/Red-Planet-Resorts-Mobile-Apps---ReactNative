@@ -1,4 +1,3 @@
-import { formatDate } from '@/utils/date';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 
@@ -7,6 +6,9 @@ import RenderHTML from 'react-native-render-html';
 
 import { WebView } from 'react-native-webview';
 import InstagramFeed from '../../components/InstagramFeed';
+import MissionControlHub from '../../components/MissionControlHub';
+import MissionControlHubFree from '../../components/MissionControlHubFree';
+import MissionInformation from '../../components/MissionInformation';
 import SpaceHistory from '../../components/SpaceHistory';
 import SpaceNews from '../../components/SpaceNews';
 import SubmitStoryModal from '../../components/SubmitYoursForm';
@@ -31,7 +33,6 @@ import {
 
 import { isTicketOnlyRoute } from '@/constants/config';
 import useMissionPage from '@/hooks/useMissionPage';
-import { Ionicons } from '@expo/vector-icons';
 
 export default function MissionPage() {
   const router = useRouter();
@@ -146,258 +147,92 @@ if (loading) {
     <View style={{ flex: 1 }}>
       <View style={styles.mainContent}>
 
+
         {isFreeUser && (
-          
-            
-              <View>
-                <Text style={styles.headingCenter}>Mission Control Hub</Text>
-                <View style={styles.row}>
-                  <View style={styles.box}>
-                    <Pressable style={({ pressed }) => [
-                          styles.linkStyle,
-                          pressed && styles.pressed,
-                          isLocked('/dashboard/DistanceProgressIndicator') && styles.locked,
-                        ]}
-                        disabled={isLocked('/dashboard/DistanceProgressIndicator')}
-                        accessibilityState={{ disabled: isLocked('/dashboard/DistanceProgressIndicator') }}
-                        onPress={() => router.push('/dashboard/DistanceProgressIndicator')}>
-                        <LinearGradient
-                          colors={[
-                            'rgba(24,58,86,0.2)',
-                            'rgba(63,125,139,0.2)',
-                            'rgba(24,58,86,0.2)',
-                          ]}
-                          locations={[0.03, 0.51, 0.99]}
-                          start={{ x: 0, y: 0 }}  
-                          end={{ x: 1, y: 0 }}  
-                          style={styles.anchorBox}
-                        >
-                        {isLocked('/dashboard/DistanceProgressIndicator') }
-                        <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 10, fontWeight: '400', textTransform: 'uppercase', marginBottom:0, textAlign: 'center' }}>Distance & Progress{'\n'}Indicators</Text>
-                      </LinearGradient>
-                    </Pressable>
-                  </View>
-                  <View style={styles.box}>
-                    <Pressable style={({ pressed }) => [
-                          styles.linkStyle,
-                          pressed && styles.pressed
-                        ]}
-                        onPress={() => router.push('/dashboard/EnvironmentalData')}>
-                        <LinearGradient
-                          colors={[
-                            'rgba(24,58,86,0.2)',
-                            'rgba(63,125,139,0.2)',
-                            'rgba(24,58,86,0.2)',
-                          ]}
-                          locations={[0.03, 0.51, 0.99]}
-                          start={{ x: 0, y: 0 }}  
-                          end={{ x: 1, y: 0 }}  
-                          style={styles.anchorBox}
-                        >
-                        <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 10, fontWeight: '400', textTransform: 'uppercase', marginBottom:0, textAlign: 'center' }}>Environmental{'\n'}Data</Text>
-                      </LinearGradient>
-                    </Pressable>
-                  </View>
-                </View>
+            <>
+              <MissionControlHubFree/>
+              <Pressable style={({ pressed }) => [
+                    styles.linkStyleCaptainLog,
+                    pressed && styles.pressed,
+                    isLocked('#') && styles.locked,
+                  ]}
+                  disabled={isLocked('/dashboard/ShipsTracker')}
+                  accessibilityState={{ disabled: isLocked('/dashboard/ShipsTracker') }}
+                  onPress={() => router.push('/dashboard/ShipsTracker')}>
+                  <LinearGradient
+                    colors={[
+                      '#0C2046',
+                      '#004F99',
+                    ]}
+                    locations={[0.03, 0.99]}
+                    start={{ x: 0, y: 0 }}  
+                    end={{ x: 1, y: 0 }}  
+                    style={styles.anchorBoxCaptainLog}
+                  >
+                  {isLocked('/dashboard/ShipsTracker')}
 
-                <View style={styles.row}>
-                  <View style={styles.box}>
-                    <Pressable style={({ pressed }) => [
-                          styles.linkStyle,
-                          pressed && styles.pressed,
-                          isLocked('/dashboard/CommunicationMetrics') && styles.locked,
-                        ]}
-                        disabled={isLocked('/dashboard/CommunicationMetrics')}
-                        accessibilityState={{ disabled: isLocked('/dashboard/CommunicationMetrics') }}
-                        onPress={() => router.push('/dashboard/CommunicationMetrics')}>
-                        <LinearGradient
-                          colors={[
-                            'rgba(24,58,86,0.2)',
-                            'rgba(63,125,139,0.2)',
-                            'rgba(24,58,86,0.2)',
-                          ]}
-                          locations={[0.03, 0.51, 0.99]}
-                          start={{ x: 0, y: 0 }}  
-                          end={{ x: 1, y: 0 }}  
-                          style={styles.anchorBox}
-                        >
-                        {isLocked('/dashboard/CommunicationMetrics')}
-                        <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 10, fontWeight: '400', textTransform: 'uppercase', marginBottom:0, textAlign: 'center' }}>Communication{'\n'}Metrics</Text>
-                      </LinearGradient>
-                    </Pressable>
-                  </View>
-                  <View style={styles.box}>
-                    <Pressable style={({ pressed }) => [
-                          styles.linkStyle,
-                          pressed && styles.pressed,
-                          isLocked('/dashboard/ShipsTracker') && styles.locked,
-                        ]}
-                        disabled={isLocked('/dashboard/ShipsTracker')}
-                        accessibilityState={{ disabled: isLocked('/dashboard/ShipsTracker') }}
-                        onPress={() => router.push('/dashboard/ShipsTracker')}>
-                        <LinearGradient
-                          colors={[
-                            'rgba(24,58,86,0.2)',
-                            'rgba(63,125,139,0.2)',
-                            'rgba(24,58,86,0.2)',
-                          ]}
-                          locations={[0.03, 0.51, 0.99]}
-                          start={{ x: 0, y: 0 }}  
-                          end={{ x: 1, y: 0 }}  
-                          style={styles.anchorBox}
-                        >
-                        {isLocked('/dashboard/ShipsTracker')}
-                        <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 10, fontWeight: '400', textTransform: 'uppercase', marginBottom:0, textAlign: 'center' }}>Ship{'\n'}Tracker</Text>
-                      </LinearGradient>
-                    </Pressable>
-                  </View>
-                </View>
-
-                <View style={styles.row}>
-                  <View style={styles.box}>
-                    <Pressable style={({ pressed }) => [
-                          styles.linkStyle,
-                          pressed && styles.pressed
-                        ]}
-                        onPress={() => router.push('/dashboard/WeeklyScheduleSnapshot')}>
-                        <LinearGradient
-                          colors={[
-                            'rgba(24,58,86,0.2)',
-                            'rgba(63,125,139,0.2)',
-                            'rgba(24,58,86,0.2)',
-                          ]}
-                          locations={[0.03, 0.51, 0.99]}
-                          start={{ x: 0, y: 0 }}  
-                          end={{ x: 1, y: 0 }}  
-                          style={styles.anchorBox}
-                        >
-                        <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 10, fontWeight: '400', textTransform: 'uppercase', marginBottom:0, textAlign: 'center' }}>Weekly Schedule{'\n'}Snapshot</Text>
-                      </LinearGradient>
-                    </Pressable>
-                  </View>
-                  <View style={styles.box}>
-                    <Pressable style={({ pressed }) => [
-                          styles.linkStyle,
-                          pressed && styles.pressed
-                        ]}
-                        onPress={() => router.push('/dashboard/SolarData')}>
-                        <LinearGradient
-                          colors={[
-                            'rgba(24,58,86,0.2)',
-                            'rgba(63,125,139,0.2)',
-                            'rgba(24,58,86,0.2)',
-                          ]}
-                          locations={[0.03, 0.51, 0.99]}
-                          start={{ x: 0, y: 0 }}  
-                          end={{ x: 1, y: 0 }}  
-                          style={styles.anchorBox}
-                        >
-                        <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 10, fontWeight: '400', textTransform: 'uppercase', marginBottom:0, textAlign: 'center' }}>Solar Data{'\n'}Graph</Text>
-                      </LinearGradient>
-                    </Pressable>
-                  </View>
-                </View>
-                <View style={styles.hsitoryContainer}>
-
-                </View>
-
-
-                 <Pressable style={({ pressed }) => [
-                          styles.linkStyle,
-                          pressed && styles.pressed,
-                          isLocked('/dashboard/ShipsTracker') && styles.locked,
-                        ]}
-                        disabled={isLocked('/dashboard/ShipsTracker')}
-                        accessibilityState={{ disabled: isLocked('/dashboard/ShipsTracker') }}
-                        onPress={() => router.push('/dashboard/ShipsTracker')}>
-                        <LinearGradient
-                          colors={[
-                            'rgba(24,58,86,0.2)',
-                            'rgba(63,125,139,0.2)',
-                            'rgba(24,58,86,0.2)',
-                          ]}
-                          locations={[0.03, 0.51, 0.99]}
-                          start={{ x: 0, y: 0 }}  
-                          end={{ x: 1, y: 0 }}  
-                          style={styles.anchorBox}
-                        >
-                        {isLocked('/dashboard/ShipsTracker')}
-                        <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 10, fontWeight: '400', textTransform: 'uppercase', marginBottom:0, textAlign: 'center' }}>Captain's Log</Text>
-                      </LinearGradient>
-                    </Pressable>
-
-              </View>
-            
-
-           
-
+                    <View style={styles.CaptainLogBtn}> 
+                      <Image
+                        source={require('../../assets/images/captain-msg-icon.png')}
+                        style={{ width: 35, height: 36 }}
+                        resizeMode="contain"
+                      />
+                      <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 19, fontWeight: '400', textTransform: 'uppercase', marginBottom:0, textAlign: 'center' }}>Captain's Log</Text>
+                    </View> 
+                    </LinearGradient>
+                    
+              </Pressable>
+            </>
 
         )}
+       
+
+        {isFreeUser && (
+          <>
+          <Pressable style={({ pressed }) => [
+                  styles.linkStyle,
+                  pressed && styles.pressed
+                ]}
+                onPress={() => router.push('/register')}>
+                <LinearGradient
+                  colors={[
+                    'rgba(24,58,86,0.2)',
+                    'rgba(63,125,139,0.2)',
+                    'rgba(24,58,86,0.2)',
+                  ]}
+                  locations={[0.03, 0.51, 0.99]}
+                  start={{ x: 0, y: 0 }}  
+                  end={{ x: 1, y: 0 }}  
+                  style={styles.anchorBox}
+                >
+                <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 10, fontWeight: '400', textTransform: 'uppercase', marginBottom:0, textAlign: 'center' }}>MARS ENTRY AND CLEARANCE OFFICE REGISTRY</Text>
+              </LinearGradient>
+            </Pressable>
 
 
+            <View style={styles.hsitoryContainer}>
+              <Text style={styles.headingCenter}>
+                Space History
+              </Text>
+              <SpaceHistory/>
+            </View>
+
+            </>
+        )}
         
         
         {isFreeUser && (
           <Text style={{ color:'#fff' }}>Free User</Text>
         )}
 
-      {!isFreeUser && (
-        <View>
-          <Text style={styles.mainHeading}>Mission information</Text>
-
-          <View style={styles.thereeColumns}>
-            <View style={{ width: '31%' }}>
-              <View style={styles.topContentHolder}>
-                <Text style={styles.topHeading}>Starship Sagan:</Text>
-                <Text style={styles.topContent}>
-                  {page?.acf?.mission_code}
-                </Text>
-              </View>
-              <View style={styles.topContentHolder}>
-                <Text style={styles.topHeading}>Mission Status:</Text>
-                <Text style={styles.topContent}>
-                  {page?.acf?.mission_status}
-                </Text>
-              </View>
-            </View>
-
-            <View style={{ width: '25%' }}>
-              <View style={styles.topContentHolder}>
-                <Text style={styles.topHeading}>Launch Date:</Text>
-                <Text style={styles.topContent}>
-                  {formatDate(page?.acf?.launch_date || '')}
-                </Text>
-              </View>
-              <View style={styles.topContentHolder}>
-                <Text style={styles.topHeading}>Return Date:</Text>
-                <Text style={styles.topContent}>
-                  {formatDate(page?.acf?.rtn_date || '')}
-                </Text>
-              </View>
-            </View>
-
-            <View style={{ width: '35%' }}>
-              <View style={styles.topContentHolder}>
-                <Text style={styles.topHeading}>Mission Duration:</Text>
-                <Text style={styles.topContent}>
-                  {page?.acf?.mission_duration}
-                </Text>
-              </View>
-              <View style={styles.topContentHolder}>
-                <Text style={styles.topHeading}>Crew Count:</Text>
-                <Text style={styles.topContent}>
-                  {page?.acf?.crew_count}
-                </Text>
-              </View>
-            </View>
-          </View>
-        </View>
+        {!isFreeUser && (
+          <MissionInformation/>
         )}
 
 
 
         {!isFreeUser && (
-  <>
+        <>
 
         {(() => {
         const rtn = page?.acf?.rtn_date;
@@ -549,174 +384,12 @@ if (loading) {
 
       </View>
 
-      <LinearGradient
-          colors={['#0E1F3F', 'rgba(14,42,97,0.5)', 'rgba(1,10,27,0)']}
-          locations={[0, 0.22, 0.88]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 0, y: 1 }}
-          style={{ borderTopLeftRadius:10, borderTopRightRadius:10, paddingHorizontal:17, paddingVertical:25, }}
-        >
-          <View>
-            <Text style={styles.headingCenter}>Mission Control Hub</Text>
-            <View style={styles.row}>
-              <View style={styles.box}>
-                <Pressable style={({ pressed }) => [
-                      styles.linkStyle,
-                      pressed && styles.pressed,
-                      isLocked('/dashboard/DistanceProgressIndicator') && styles.locked,
-                    ]}
-                    disabled={isLocked('/dashboard/DistanceProgressIndicator')}
-                    accessibilityState={{ disabled: isLocked('/dashboard/DistanceProgressIndicator') }}
-                    onPress={() => router.push('/dashboard/DistanceProgressIndicator')}>
-                    <LinearGradient
-                      colors={[
-                        'rgba(24,58,86,0.2)',
-                        'rgba(63,125,139,0.2)',
-                        'rgba(24,58,86,0.2)',
-                      ]}
-                      locations={[0.03, 0.51, 0.99]}
-                      start={{ x: 0, y: 0 }}  
-                      end={{ x: 1, y: 0 }}  
-                      style={styles.anchorBox}
-                    >
-                    {isLocked('/dashboard/DistanceProgressIndicator') && <Ionicons name="lock-closed" size={12} color="#F6D78B" style={styles.lockIcon} />}
-                    <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 10, fontWeight: '400', textTransform: 'uppercase', marginBottom:0, textAlign: 'center' }}>Distance & Progress{'\n'}Indicators</Text>
-                  </LinearGradient>
-                </Pressable>
-              </View>
-              <View style={styles.box}>
-                <Pressable style={({ pressed }) => [
-                      styles.linkStyle,
-                      pressed && styles.pressed
-                    ]}
-                    onPress={() => router.push('/dashboard/EnvironmentalData')}>
-                    <LinearGradient
-                      colors={[
-                        'rgba(24,58,86,0.2)',
-                        'rgba(63,125,139,0.2)',
-                        'rgba(24,58,86,0.2)',
-                      ]}
-                      locations={[0.03, 0.51, 0.99]}
-                      start={{ x: 0, y: 0 }}  
-                      end={{ x: 1, y: 0 }}  
-                      style={styles.anchorBox}
-                    >
-                    <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 10, fontWeight: '400', textTransform: 'uppercase', marginBottom:0, textAlign: 'center' }}>Environmental{'\n'}Data</Text>
-                  </LinearGradient>
-                </Pressable>
-              </View>
-            </View>
 
-            <View style={styles.row}>
-              <View style={styles.box}>
-                <Pressable style={({ pressed }) => [
-                      styles.linkStyle,
-                      pressed && styles.pressed,
-                      isLocked('/dashboard/CommunicationMetrics') && styles.locked,
-                    ]}
-                    disabled={isLocked('/dashboard/CommunicationMetrics')}
-                    accessibilityState={{ disabled: isLocked('/dashboard/CommunicationMetrics') }}
-                    onPress={() => router.push('/dashboard/CommunicationMetrics')}>
-                    <LinearGradient
-                      colors={[
-                        'rgba(24,58,86,0.2)',
-                        'rgba(63,125,139,0.2)',
-                        'rgba(24,58,86,0.2)',
-                      ]}
-                      locations={[0.03, 0.51, 0.99]}
-                      start={{ x: 0, y: 0 }}  
-                      end={{ x: 1, y: 0 }}  
-                      style={styles.anchorBox}
-                    >
-                    {isLocked('/dashboard/CommunicationMetrics') && <Ionicons name="lock-closed" size={12} color="#F6D78B" style={styles.lockIcon} />}
-                    <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 10, fontWeight: '400', textTransform: 'uppercase', marginBottom:0, textAlign: 'center' }}>Communication{'\n'}Metrics</Text>
-                  </LinearGradient>
-                </Pressable>
-              </View>
-              <View style={styles.box}>
-                <Pressable style={({ pressed }) => [
-                      styles.linkStyle,
-                      pressed && styles.pressed,
-                      isLocked('/dashboard/ShipsTracker') && styles.locked,
-                    ]}
-                    disabled={isLocked('/dashboard/ShipsTracker')}
-                    accessibilityState={{ disabled: isLocked('/dashboard/ShipsTracker') }}
-                    onPress={() => router.push('/dashboard/ShipsTracker')}>
-                    <LinearGradient
-                      colors={[
-                        'rgba(24,58,86,0.2)',
-                        'rgba(63,125,139,0.2)',
-                        'rgba(24,58,86,0.2)',
-                      ]}
-                      locations={[0.03, 0.51, 0.99]}
-                      start={{ x: 0, y: 0 }}  
-                      end={{ x: 1, y: 0 }}  
-                      style={styles.anchorBox}
-                    >
-                    {isLocked('/dashboard/ShipsTracker') && <Ionicons name="lock-closed" size={12} color="#F6D78B" style={styles.lockIcon} />}
-                    <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 10, fontWeight: '400', textTransform: 'uppercase', marginBottom:0, textAlign: 'center' }}>Ship{'\n'}Tracker</Text>
-                  </LinearGradient>
-                </Pressable>
-              </View>
-            </View>
+    {!isFreeUser && (
+      <MissionControlHub/>
+    )}
 
-            <View style={styles.row}>
-              <View style={styles.box}>
-                <Pressable style={({ pressed }) => [
-                      styles.linkStyle,
-                      pressed && styles.pressed
-                    ]}
-                    onPress={() => router.push('/dashboard/WeeklyScheduleSnapshot')}>
-                    <LinearGradient
-                      colors={[
-                        'rgba(24,58,86,0.2)',
-                        'rgba(63,125,139,0.2)',
-                        'rgba(24,58,86,0.2)',
-                      ]}
-                      locations={[0.03, 0.51, 0.99]}
-                      start={{ x: 0, y: 0 }}  
-                      end={{ x: 1, y: 0 }}  
-                      style={styles.anchorBox}
-                    >
-                    <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 10, fontWeight: '400', textTransform: 'uppercase', marginBottom:0, textAlign: 'center' }}>Weekly Schedule{'\n'}Snapshot</Text>
-                  </LinearGradient>
-                </Pressable>
-              </View>
-              <View style={styles.box}>
-                <Pressable style={({ pressed }) => [
-                      styles.linkStyle,
-                      pressed && styles.pressed
-                    ]}
-                    onPress={() => router.push('/dashboard/SolarData')}>
-                    <LinearGradient
-                      colors={[
-                        'rgba(24,58,86,0.2)',
-                        'rgba(63,125,139,0.2)',
-                        'rgba(24,58,86,0.2)',
-                      ]}
-                      locations={[0.03, 0.51, 0.99]}
-                      start={{ x: 0, y: 0 }}  
-                      end={{ x: 1, y: 0 }}  
-                      style={styles.anchorBox}
-                    >
-                    <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 10, fontWeight: '400', textTransform: 'uppercase', marginBottom:0, textAlign: 'center' }}>Solar Data{'\n'}Graph</Text>
-                  </LinearGradient>
-                </Pressable>
-              </View>
-            </View>
-            <View style={styles.hsitoryContainer}>
-
-            </View>
-
-          </View>
-      </LinearGradient>
-
-      <View style={styles.hsitoryContainer}>
-        <Text style={styles.headingCenter}>
-          Space History
-        </Text>
-        <SpaceHistory/>
-      </View>
+      
 
       <View style={styles.communityContainer}>
         <Text style={styles.headingCenter}>
@@ -737,7 +410,7 @@ if (loading) {
                   style={styles.historyBox}
               >
               
-                  
+
 
                   {isFreeUser && (
                     <>
@@ -941,10 +614,15 @@ const styles = StyleSheet.create({
   row: {  flexDirection: 'row', justifyContent: 'space-between',  marginBottom: 12, },
   box: {  width: '48%',  alignItems: 'center', },
   linkStyle:{  width:'100%'},
+  linkStyleCaptainLog:{  width:'auto', flexDirection:'row', alignItems:'center', gap:14, height:67, paddingHorizontal:30, justifyContent:'center', marginTop:30, marginBottom:20},
   locked: { opacity: 0.45 },
   lockIcon: { position: 'absolute', top: 6, right: 10 },
   pressed: { opacity: 0.6, },
   anchorBox:{ width:'100%', height:50, borderRadius:10, justifyContent:'center', alignItems:'center', borderColor:'rgba(101, 129, 135, 1)', borderWidth:1, borderStyle:'solid', paddingHorizontal:5, },
+  anchorBoxCaptainLog:{ width:'100%', height:67, borderRadius:10, justifyContent:'center', alignItems:'center', borderColor:'#658187', borderWidth:1, borderStyle:'solid', paddingHorizontal:5, opacity:0.5 , marginBottom:30, fontSize:19,},
+
+
+
   hsitoryContainer:{},
   communityContainer:{ marginTop:15,} ,
   historyBox:{ borderStyle:'solid', borderWidth:1, borderColor:'rgba(101, 129, 135, 1)', borderRadius:10, paddingVertical:20, paddingHorizontal:20,},
@@ -1005,5 +683,7 @@ resupplyBtnText: {
   fontFamily: 'Audiowide_400Regular',
   textTransform: 'uppercase',
 },
+CaptainLogBtn:{ alignItems:'center', gap:14, flexDirection:'row' , height:67,}
+
 
 });
