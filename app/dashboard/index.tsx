@@ -9,10 +9,10 @@ import InstagramFeed from '../../components/InstagramFeed';
 import MissionControlHub from '../../components/MissionControlHub';
 import MissionControlHubFree from '../../components/MissionControlHubFree';
 import MissionInformation from '../../components/MissionInformation';
+import ProductStore from '../../components/Products';
 import SpaceHistory from '../../components/SpaceHistory';
 import SpaceNews from '../../components/SpaceNews';
 import SubmitStoryModal from '../../components/SubmitYoursForm';
-
 
 
 import { useState } from 'react';
@@ -147,6 +147,7 @@ if (loading) {
     <View style={{ flex: 1 }}>
       <View style={styles.mainContent}>
 
+        <ProductStore/>
 
         {isFreeUser && (
             <>
