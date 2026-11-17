@@ -481,6 +481,52 @@ if (loading) {
       <ProductStore/>
 
 
+        {isFreeUser && (
+          <View
+            style={{ width: '100%', padding: 30, alignItems: 'center', justifyContent: 'center', }}>
+            <Text style={{ paddingBottom: 30, fontSize: 12,fontWeight: '400',textAlign: 'center',color: '#fff', lineHeight:17,fontFamily: 'Audiowide_400Regular', textTransform:'uppercase', }}
+            >
+              Unlocks the full app, 26-Month trip updates & upgrades status to MECO Approved
+            </Text>
+
+            <View style={{  flexDirection: 'column', gap: 20 }}>
+              <Pressable style={({ pressed }) => [
+                    styles.imagelinkStyle,
+                    pressed && styles.pressed
+                  ]}
+                  onPress={() => router.push('/scanner')}>
+                <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 14, fontWeight: '400', textTransform: 'uppercase', marginBottom:14, textAlign: 'center' }}>Scan your ticket</Text>
+                
+                  <Image
+                  source={require('../../assets/images/scannerImage.png')}
+                  style={{ width: 140, height: 137 }}
+                />
+              </Pressable>
+              <Pressable
+                style={({ pressed }) => [
+                  styles.imagelinkStyle,
+                  pressed && styles.pressed
+                ]}
+                onPress={() =>
+                  Linking.openURL('https://redplanetresorts.com/pages/plan-your-trip')
+                }
+              >
+                <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 14, fontWeight: '400', textTransform: 'uppercase', marginBottom:14, textAlign: 'center' }}>Buy Ticket</Text>
+                  
+                  <Image
+                  source={require('../../assets/images/ticket.png')}
+                  style={{ width: 161, height: 105 }}
+                />
+
+
+              </Pressable>
+            </View>
+          </View>
+
+        )}
+
+
+
 
       <Modal
         visible={visible}
@@ -695,5 +741,7 @@ resupplyBtnText: {
 },
 CaptainLogBtn:{ alignItems:'center', gap:14, flexDirection:'row' , height:67,},
 passportBtn:{ flexDirection:'row', alignItems:'center', justifyContent:'center', gap:10, height:36, marginBottom:5, paddingHorizontal:20, fontSize:14, },
+imagelinkStyle:{ backgroundColor:'rgba(217,217,217, 0.12)', paddingVertical:17, paddingHorizontal:17, borderRadius:10, alignItems:'center', justifyContent:'center', width:'100%',},
+
 
 });
