@@ -65,7 +65,7 @@ const SpaceHistory = () => {
 }, []);
 
   return (
-    <View style={{ paddingHorizontal: 17, paddingBottom: 17 }}>
+    <View style={{ paddingHorizontal: 0, paddingBottom: 0 }}>
       <LinearGradient
         colors={[
           'rgba(24,58,86,0.2)',

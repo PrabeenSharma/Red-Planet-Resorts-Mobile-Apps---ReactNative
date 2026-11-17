@@ -101,14 +101,11 @@ export default function SpaceNews() {
               style={{ borderTopLeftRadius:10, borderTopRightRadius:10, paddingHorizontal:17, paddingVertical:25, marginTop:20, }}
             >
       <Text style={styles.headingCenter}>
-        {page?.acf?.sn_heading?.replace(
-          /<br\s*\/?>/gi,
-          '\n'
-        )}
+        Space news digest
       </Text>
 
       <Text style={styles.description}>
-        {page?.acf?.sn_description}
+        latest updates from earth and beyond, curated for our interplanetary travelers
       </Text>
 
       {news.map((article, index) => {

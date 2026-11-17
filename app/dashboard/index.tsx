@@ -147,7 +147,7 @@ if (loading) {
     <View style={{ flex: 1 }}>
       <View style={styles.mainContent}>
 
-        <ProductStore/>
+        
 
         {isFreeUser && (
             <>
@@ -197,16 +197,24 @@ if (loading) {
                 onPress={() => router.push('/register')}>
                 <LinearGradient
                   colors={[
-                    'rgba(24,58,86,0.2)',
-                    'rgba(63,125,139,0.2)',
-                    'rgba(24,58,86,0.2)',
-                  ]}
-                  locations={[0.03, 0.51, 0.99]}
+                      '#0C2046',
+                      '#004F99',
+                    ]}
+                    locations={[0.03, 0.99]}
                   start={{ x: 0, y: 0 }}  
                   end={{ x: 1, y: 0 }}  
-                  style={styles.anchorBox}
+                  style={styles.anchorBoxPassport}
                 >
-                <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 10, fontWeight: '400', textTransform: 'uppercase', marginBottom:0, textAlign: 'center' }}>MARS ENTRY AND CLEARANCE OFFICE REGISTRY</Text>
+                <View style={styles.passportBtn}>
+                  <View>
+                    <Image
+                        source={require('../../assets/images/passport-icon.png')}
+                        style={{ width: 26, height: 29 }}
+                        resizeMode="contain"
+                      />
+                  </View>
+                  <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 13, fontWeight: '400', textTransform: 'uppercase', marginBottom:0, textAlign: 'center' }}>MARS ENTRY AND CLEARANCE OFFICE REGISTRY</Text>
+                </View>
               </LinearGradient>
             </Pressable>
 
@@ -222,9 +230,6 @@ if (loading) {
         )}
         
         
-        {isFreeUser && (
-          <Text style={{ color:'#fff' }}>Free User</Text>
-        )}
 
         {!isFreeUser && (
           <MissionInformation/>
@@ -473,6 +478,8 @@ if (loading) {
 
       <InstagramFeed/>
 
+      <ProductStore/>
+
 
 
       <Modal
@@ -620,6 +627,8 @@ const styles = StyleSheet.create({
   lockIcon: { position: 'absolute', top: 6, right: 10 },
   pressed: { opacity: 0.6, },
   anchorBox:{ width:'100%', height:50, borderRadius:10, justifyContent:'center', alignItems:'center', borderColor:'rgba(101, 129, 135, 1)', borderWidth:1, borderStyle:'solid', paddingHorizontal:5, },
+  anchorBoxPassport:{ width:'100%', height:67, borderRadius:10, justifyContent:'center', alignItems:'center', borderColor:'rgba(101, 129, 135, 1)', borderWidth:1, borderStyle:'solid', paddingHorizontal:5, marginBottom:25,},
+  
   anchorBoxCaptainLog:{ width:'100%', height:67, borderRadius:10, justifyContent:'center', alignItems:'center', borderColor:'#658187', borderWidth:1, borderStyle:'solid', paddingHorizontal:5, opacity:0.5 , marginBottom:30, fontSize:19,},
 
 
@@ -684,7 +693,7 @@ resupplyBtnText: {
   fontFamily: 'Audiowide_400Regular',
   textTransform: 'uppercase',
 },
-CaptainLogBtn:{ alignItems:'center', gap:14, flexDirection:'row' , height:67,}
-
+CaptainLogBtn:{ alignItems:'center', gap:14, flexDirection:'row' , height:67,},
+passportBtn:{ flexDirection:'row', alignItems:'center', justifyContent:'center', gap:10, height:36, marginBottom:5, paddingHorizontal:20, fontSize:14, },
 
 });

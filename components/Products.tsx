@@ -94,7 +94,7 @@ export default function TravelerMarketplace() {
           </Text>
       </View>
 
-      <View style={{ paddingHorizontal:0, paddingBottom:17,}}>
+      <View style={{ paddingHorizontal:15, paddingBottom:17,}}>
             
                     <LinearGradient
                         colors={[
@@ -177,7 +177,8 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     textAlign:'center',
     fontFamily: 'Audiowide_400Regular',
-
+    paddingLeft:15,
+    paddingRight:15,
   },
   sectionTitle: {
     color: '#F6D78B',
@@ -193,9 +194,10 @@ const styles = StyleSheet.create({
   },
   productImage: {
     width: '100%',
-    height: 400,
+    height: 320,
     backgroundColor: '#1B2530',
     marginBottom:20,
+    borderRadius:10,
   },
   productContent: {
     paddingTop: 17,
