@@ -14,7 +14,7 @@ type Props = {
   onPress: () => void;
   loading?: boolean;
   disabled?: boolean;
-  variant?: 'gold' | 'blue';
+  variant?: 'blue' | 'transparent';
   style?: StyleProp<ViewStyle>;
   testID?: string;
 };
@@ -22,6 +22,7 @@ type Props = {
 const GRADIENTS = {
   gold: ['#F6D78B', '#D4A63A', '#9C7420'] as const,
   blue: ['#0C2046', '#004F99'] as const,
+  transparent: ['transparent', 'transparent'] as const,
 };
 
 export default function GoldButton({
@@ -29,7 +30,7 @@ export default function GoldButton({
   onPress,
   loading = false,
   disabled = false,
-  variant = 'gold',
+  variant = 'blue',
   style,
   testID,
 }: Props) {
@@ -76,15 +77,14 @@ export default function GoldButton({
 
 const styles = StyleSheet.create({
   wrapper: {
-    borderRadius: 40,
+    borderRadius: 6,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(246, 215, 139, 0.8)',
-    shadowColor: '#D4A63A',
-    shadowOpacity: 0.45,
-    shadowRadius: 14,
-    shadowOffset: { width: 0, height: 0 },
+    borderColor: '#7E94B5',
     elevation: 6,
+    color:'#fff',
+    width:'100%',
+    maxWidth: 350,
   },
 
   wrapperBlue: {
@@ -112,11 +112,12 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    color: '#000',
+    color: '#fff',
     fontFamily: 'Audiowide_400Regular',
     fontSize: 15,
-    letterSpacing: 1.5,
+    letterSpacing: 1,
     textTransform: 'uppercase',
+    textAlign: 'center',
   },
 
   textBlue: {

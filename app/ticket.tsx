@@ -84,7 +84,7 @@ export default function TicketQuestionScreen() {
           <GoldButton
             testID="ticket-no"
             title="No"
-            variant="blue"
+            variant="transparent"
             onPress={handleNo}
             disabled={busy}
           />
@@ -96,6 +96,7 @@ export default function TicketQuestionScreen() {
         >
           <Text style={styles.buyText}>Want a ticket? Plan your trip</Text>
         </Pressable>
+        
       </View>
     </ScrollView>
   );
@@ -129,7 +130,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 32,
   },
-  buttons: { alignSelf: 'stretch', gap: 16 },
+  buttons: {  gap: 16 , justifyContent: 'center', alignItems: 'center', marginBottom: 24, width:'100%' },
   buyLink: { marginTop: 24, padding: 8 },
   buyText: {
     color: '#00DDF1',

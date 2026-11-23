@@ -21,6 +21,7 @@ import {
   clearAllScanData,
   getNotificationsEnabled,
   getScannedSlug,
+  saveFreeAccess,
   saveNotificationsEnabled,
 } from '@/utils/storage';
 
@@ -415,6 +416,17 @@ export default function Header() {
     }
   };
 
+   const myAccount = async () => {
+      await saveFreeAccess(true);
+      router.replace('/dashboard/myAccount');
+    };
+
+const commissionYourRover = async () => {
+      await saveFreeAccess(true);
+      router.replace('/#');
+    };
+    
+
   return (
 
     <View style={styles.container}>
@@ -422,25 +434,27 @@ export default function Header() {
       {isDashboardSubPage ? (
 
         <TouchableOpacity
-          onPress={() =>
-            router.replace('/dashboard')
-          }
-          style={styles.backButton}
-        >
+    onPress={() => {
+      if (router.canGoBack()) {
+        router.back();
+      } else {
+        router.replace('/dashboard');
+      }
+    }}
+    style={styles.backButton}
+  >
 
-          <View style={styles.backButtonArrow}>
+    <View style={styles.backButtonArrow}>
+      <Image
+        source={require('./../assets/images/back.png')}
+        style={{
+          width: 20,
+          height: 20,
+        }}
+      />
+    </View>
 
-            <Image
-              source={require('./../assets/images/back.png')}
-              style={{
-                width: 20,
-                height: 20,
-              }}
-            />
-
-          </View>
-
-        </TouchableOpacity>
+  </TouchableOpacity>
 
       ) : (
 
@@ -507,6 +521,53 @@ export default function Header() {
             onPress={() => {}}
           >
 
+
+            <TouchableOpacity
+              style={styles.menuItemScan}
+              onPress={myAccount}
+              >
+              <Image
+                source={require('./../assets/images/scanIcon.png')}  style={{  width: 14,  height: 14, flexShrink: 0,  }} />
+              <Text style={styles.menuItemText}>Account info  </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.menuItemScan}
+              onPress={commissionYourRover}
+              >
+              <Image
+                source={require('./../assets/images/scanIcon.png')}  style={{  width: 14,  height: 14, flexShrink: 0,  }} />
+              <Text style={styles.menuItemText}>Commission your Rover  </Text>
+            </TouchableOpacity>
+
+          <TouchableOpacity
+              style={styles.menuItemScan}
+              onPress={handleNewScan}
+            >
+
+              <Image
+                source={require('./../assets/images/scanIcon.png')}
+                style={{
+                  width: 14,
+                  height: 14,
+                  flexShrink: 0,
+                }}
+              />
+
+              <Text
+                style={styles.menuItemText}
+              >Scan a new ticket
+              </Text>
+
+            </TouchableOpacity>
+
+            
+
+            <View
+              style={styles.menuDivider}
+            />
+
+
             <View
               style={[
                 styles.menuItem,
@@ -549,32 +610,7 @@ export default function Header() {
               />
 
             </View>
-
-            <View
-              style={styles.menuDivider}
-            />
-
-            <TouchableOpacity
-              style={styles.menuItemScan}
-              onPress={handleNewScan}
-            >
-
-              <Image
-                source={require('./../assets/images/scanIcon.png')}
-                style={{
-                  width: 14,
-                  height: 14,
-                  flexShrink: 0,
-                }}
-              />
-
-              <Text
-                style={styles.menuItemText}
-              >
-                Scan a new ticket
-              </Text>
-
-            </TouchableOpacity>
+            
 
           </Pressable>
 

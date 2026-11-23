@@ -40,6 +40,9 @@ export default function MissionPage() {
   const [visible, setVisible] = useState(false); const { width } = useWindowDimensions(); const [submitted, setSubmitted] = useState(false); const [modalVisible, setModalVisible] = useState(false);
 
 
+  const [registryModalVisible, setRegistryModalVisible] = useState(false);
+
+
   const { slug: slugParam } = useLocalSearchParams<{ slug?: string }>();
   const { page, loading, isFreeUser } = useMissionPage(slugParam);
 
@@ -194,7 +197,7 @@ if (loading) {
                   styles.linkStyle,
                   pressed && styles.pressed
                 ]}
-                onPress={() => router.push('/register')}>
+                onPress={() => setRegistryModalVisible(true)}>
                 <LinearGradient
                   colors={[
                       '#0C2046',
@@ -226,13 +229,92 @@ if (loading) {
               <SpaceHistory/>
             </View>
 
+            <View style={{ flexDirection:'row', gap:11,marginVertical:15, paddingHorizontal:17,}}>
+          <TouchableOpacity onPress={() => Linking.openURL(page?.acf?.earth_view)} style={{ flexGrow:1}}>
+            <LinearGradient
+              colors={['#0C2046', '#004F99']}
+              locations={[0.1624, 0.816]}
+              start={{ x: 0.85, y: 0.15 }}
+              end={{ x: 0.15, y: 0.85 }}
+              style={styles.optionGradient2}
+            >
+              <Image
+                  source={require('../../assets/images/earthIcon.png')}
+                  style={{ width: 22, height: 22 }}
+                />
+              <Text style={styles.optionText}>
+                Earth view
+              </Text>
+              <Image
+                  source={require('../../assets/images/arrow.png')}
+                  style={{ width: 14, height: 11 }}
+                />
+            </LinearGradient>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => Linking.openURL(page?.acf?.space_map) } style={{ flexGrow:1}}>
+            <LinearGradient
+              colors={['#0C2046', '#004F99']}
+              locations={[0.1624, 0.816]}
+              start={{ x: 0.85, y: 0.15 }}
+              end={{ x: 0.15, y: 0.85 }}
+              style={styles.optionGradient2}
+            >
+              <Image
+                  source={require('../../assets/images/spaceIcon.png')}
+                  style={{ width: 22, height: 22 }}
+                />
+              <Text style={styles.optionText}>
+                Space Map
+              </Text>
+              <Image
+                  source={require('../../assets/images/arrow.png')}
+                  style={{ width: 14, height: 11 }}
+                />
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
+
             </>
         )}
         
         
 
+
         {!isFreeUser && (
+
+          <>
           <MissionInformation/>
+
+          <Pressable style={({ pressed }) => [
+                  styles.linkStyle,
+                  pressed && styles.pressed
+                ]}
+                onPress={() => setRegistryModalVisible(true)}>
+                <LinearGradient
+                  colors={[
+                      '#0C2046',
+                      '#004F99',
+                    ]}
+                    locations={[0.03, 0.99]}
+                  start={{ x: 0, y: 0 }}  
+                  end={{ x: 1, y: 0 }}  
+                  style={styles.anchorBoxPassport}
+                >
+                <View style={styles.passportBtn}>
+                  <View>
+                    <Image
+                        source={require('../../assets/images/passport-icon.png')}
+                        style={{ width: 26, height: 29 }}
+                        resizeMode="contain"
+                      />
+                  </View>
+                  <Text style={{ color: '#fff', fontFamily: 'Audiowide_400Regular', fontSize: 13, fontWeight: '400', textTransform: 'uppercase', marginBottom:0, textAlign: 'center' }}>MARS ENTRY AND CLEARANCE OFFICE REGISTRY</Text>
+                </View>
+              </LinearGradient>
+            </Pressable>
+
+           </>
+
         )}
 
 
@@ -338,12 +420,30 @@ if (loading) {
           </ImageBackground>
         </View>
 
+        
+
    </>
 )}
 
 
        
-        <View style={{ flexDirection:'row', gap:11,marginVertical:15,}}>
+      
+
+      </View>
+
+
+    {!isFreeUser && (
+      <>
+      <MissionControlHub/>
+      <View style={styles.hsitoryContainerTicket}>
+          <Text style={styles.headingCenter}>
+            Space History
+          </Text>
+          <SpaceHistory/>
+        </View>
+
+
+         <View style={{ flexDirection:'row', gap:11,marginVertical:15, paddingHorizontal:17,}}>
           <TouchableOpacity onPress={() => Linking.openURL(page?.acf?.earth_view)} style={{ flexGrow:1}}>
             <LinearGradient
               colors={['#0C2046', '#004F99']}
@@ -388,11 +488,8 @@ if (loading) {
           </TouchableOpacity>
         </View>
 
-      </View>
 
-
-    {!isFreeUser && (
-      <MissionControlHub/>
+        </>
     )}
 
       
@@ -526,7 +623,60 @@ if (loading) {
         )}
 
 
+<Modal
+  visible={registryModalVisible}
+  transparent={true}
+  animationType="fade"
+  statusBarTranslucent={true}
+  onRequestClose={() => setRegistryModalVisible(false)}
+>
+  <Pressable
+    style={styles.modalOverlay}
+    onPress={() => setRegistryModalVisible(false)}
+  >
+    <Pressable
+      style={styles.registryModal}
+      onPress={() => {}}
+    >
 
+      
+
+         <TouchableOpacity
+               onPress={() => setRegistryModalVisible(false)}
+              style={styles.closeBtn}
+            >
+              <Image
+                source={require('../../assets/images/close.png')}
+                style={{ width: 14, height: 14 }}
+              />
+            </TouchableOpacity>
+
+
+
+
+      <Text style={styles.modalTitle}>
+        MARS ENTRY AND CLEARANCE OFFICE
+      </Text>
+
+      <Text style={styles.modalDescription}>
+        Welcome to the Mars Entry and Clearance Office Registry.
+      </Text>
+
+      <TouchableOpacity
+        style={styles.modalButton}
+        onPress={() => {
+          setRegistryModalVisible(false);
+          router.push('/register');
+        }}
+      >
+        <Text style={styles.modalButtonText}>
+          PROCEED TO REGISTRATION
+        </Text>
+      </TouchableOpacity>
+
+    </Pressable>
+  </Pressable>
+</Modal>
 
       <Modal
         visible={visible}
@@ -667,8 +817,8 @@ const styles = StyleSheet.create({
   closeBtn: { backgroundColor: '#004F99', padding: 10, borderRadius: 8, alignItems: 'center',  position:'absolute', top:10, right:10,},
   row: {  flexDirection: 'row', justifyContent: 'space-between',  marginBottom: 12, },
   box: {  width: '48%',  alignItems: 'center', },
-  linkStyle:{  width:'100%'},
-  linkStyleCaptainLog:{  width:'auto', flexDirection:'row', alignItems:'center', gap:14, height:67, paddingHorizontal:30, justifyContent:'center', marginTop:30, marginBottom:20},
+  linkStyle:{  width:'100%', marginTop:30},
+  linkStyleCaptainLog:{  width:'auto', flexDirection:'row', alignItems:'center', gap:14, height:67, paddingHorizontal:30, justifyContent:'center', marginTop:20, marginBottom:0},
   locked: { opacity: 0.45 },
   lockIcon: { position: 'absolute', top: 6, right: 10 },
   pressed: { opacity: 0.6, },
@@ -680,6 +830,7 @@ const styles = StyleSheet.create({
 
 
   hsitoryContainer:{},
+  hsitoryContainerTicket:{ marginTop:0,  paddingHorizontal:17, },
   communityContainer:{ marginTop:15,} ,
   historyBox:{ borderStyle:'solid', borderWidth:1, borderColor:'rgba(101, 129, 135, 1)', borderRadius:10, paddingVertical:20, paddingHorizontal:20,},
   communityHeading:{ textAlign:'center', fontFamily: 'Audiowide_400Regular', fontWeight:400,  fontSize: 16,   textTransform: 'uppercase',  color: '#00DDF1', paddingTop:20, paddingBottom:15,},
@@ -743,5 +894,58 @@ CaptainLogBtn:{ alignItems:'center', gap:14, flexDirection:'row' , height:67,},
 passportBtn:{ flexDirection:'row', alignItems:'center', justifyContent:'center', gap:10, height:36, marginBottom:5, paddingHorizontal:20, fontSize:14, },
 imagelinkStyle:{ backgroundColor:'rgba(217,217,217, 0.12)', paddingVertical:17, paddingHorizontal:17, borderRadius:10, alignItems:'center', justifyContent:'center', width:'100%',},
 
+
+
+registryModal: {
+  width: '100%',
+  maxWidth: 400,
+  backgroundColor: '#0C2046',
+  borderWidth: 1,
+  borderColor: '#D4A63A',
+  borderRadius: 12,
+  padding: 25,
+  alignItems: 'center',
+},
+
+modalClose: {
+  alignSelf: 'flex-end',
+  padding: 5,
+},
+
+closeText: {
+  color: '#F6D78B',
+  fontSize: 22,
+},
+
+modalTitle: {
+  color: '#F6D78B',
+  fontFamily: 'Audiowide_400Regular',
+  fontSize: 16,
+  textAlign: 'center',
+  marginVertical: 20,
+},
+
+modalDescription: {
+  color: '#FFFFFF',
+  fontSize: 13,
+  textAlign: 'center',
+  lineHeight: 22,
+  marginBottom: 25,
+},
+
+modalButton: {
+  backgroundColor: '#D4A63A',
+  paddingVertical: 14,
+  paddingHorizontal: 18,
+  borderRadius: 6,
+  width: '100%',
+},
+
+modalButtonText: {
+  color: '#0C2046',
+  fontFamily: 'Audiowide_400Regular',
+  fontSize: 11,
+  textAlign: 'center',
+},
 
 });
